@@ -6,18 +6,19 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPLMPlugin;
-INTERFACE
+unit XPLMPlugin;
+
+interface
 {
    These APIs provide facilities to find and work with other plugins and 
    manage other plugins.                                                       
 }
 
-USES   XPLMDefs;
-   {$A4}
-{$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
-{$ENDIF}
+uses
+  XPLMDefs;
+
+{$A4}
+
 {___________________________________________________________________________
  * FINDING PLUGINS
  ___________________________________________________________________________}
@@ -28,20 +29,14 @@ USES   XPLMDefs;
    plugin.                                                                     
 }
 
-
-
    {
     XPLMGetMyID
     
     This routine returns the plugin ID of the calling plug-in.  Call this to 
     get your own ID.                                                            
    }
-   FUNCTION XPLMGetMyID: XPLMPluginID;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMGetMyID: XPLMPluginID;
+                                        cdecl; external CLibName;
 
    {
     XPLMCountPlugins
@@ -49,12 +44,8 @@ USES   XPLMDefs;
     This routine returns the total number of plug-ins that are loaded, both 
     disabled and enabled.                                                       
    }
-   FUNCTION XPLMCountPlugins: integer;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMCountPlugins: integer;
+                                        cdecl; external CLibName;
 
    {
     XPLMGetNthPlugin
@@ -63,13 +54,9 @@ USES   XPLMDefs;
     to XPLMCountPlugins-1, inclusive. Plugins may be returned in any arbitrary 
     order.                                                                      
    }
-   FUNCTION XPLMGetNthPlugin(
-                                        inIndex             : integer) : XPLMPluginID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMGetNthPlugin(
+                                        inIndex             : integer) : XPLMPluginID;
+                                        cdecl; external CLibName;
 
    {
     XPLMFindPluginByPath
@@ -78,13 +65,9 @@ USES   XPLMDefs;
     passed in absolute file system path.  XPLM_NO_PLUGIN_ID is returned if the 
     path does not point to a currently loaded plug-in.                          
    }
-   FUNCTION XPLMFindPluginByPath(
-                                        inPath              : Pchar) : XPLMPluginID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMFindPluginByPath(
+                                        inPath              : Pchar) : XPLMPluginID;
+                                        cdecl; external CLibName;
 
    {
     XPLMFindPluginBySignature
@@ -96,13 +79,9 @@ USES   XPLMDefs;
     plug-in name, and should be unique for all plug-ins.  Use this routine to 
     locate another plugin that your plugin interoperates with                   
    }
-   FUNCTION XPLMFindPluginBySignature(
+   function XPLMFindPluginBySignature(
                                         inSignature         : Pchar) : XPLMPluginID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetPluginInfo
@@ -116,17 +95,13 @@ USES   XPLMDefs;
     unique string that identifies this plug-in. outDescription - a 
     human-readable description of this plug-in.                                 
    }
-   PROCEDURE XPLMGetPluginInfo(
+   procedure XPLMGetPluginInfo(
                                         inPlugin            : XPLMPluginID;    
                                         outName             : Pchar;    { Can be nil }
                                         outFilePath         : Pchar;    { Can be nil }
                                         outSignature        : Pchar;    { Can be nil }
                                         outDescription      : Pchar);    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * ENABLING/DISABLING PLUG-INS
@@ -143,13 +118,9 @@ USES   XPLMDefs;
     
     Returns whether the specified plug-in is enabled for running.               
    }
-   FUNCTION XPLMIsPluginEnabled(
+   function XPLMIsPluginEnabled(
                                         inPluginID          : XPLMPluginID) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMEnablePlugin
@@ -159,26 +130,18 @@ USES   XPLMDefs;
     Plugins may fail to enable (for example, if resources cannot be acquired) 
     by returning 0 from their XPluginEnable callback.                           
    }
-   FUNCTION XPLMEnablePlugin(
+   function XPLMEnablePlugin(
                                         inPluginID          : XPLMPluginID) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMDisablePlugin
     
     This routine disableds an enabled plug-in.                                  
    }
-   PROCEDURE XPLMDisablePlugin(
+   procedure XPLMDisablePlugin(
                                         inPluginID          : XPLMPluginID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMReloadPlugins
@@ -189,12 +152,8 @@ USES   XPLMDefs;
     will be unloaded, then the start process happens as if the sim was starting 
     up.                                                                         
    }
-   PROCEDURE XPLMReloadPlugins;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   procedure XPLMReloadPlugins;
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * INTERPLUGIN MESSAGING
@@ -217,9 +176,7 @@ USES   XPLMDefs;
    The following messages are sent to your plugin by x-plane.                  
 }
 
-
-
-CONST
+const
     { This message is sent to your plugin whenever the user's plane crashes.      }
    XPLM_MSG_PLANE_CRASHED = 101;
 
@@ -275,15 +232,11 @@ CONST
     XPLM_NO_PLUGIN_ID to broadcast to all plug-ins.  Only enabled plug-ins with 
     a message receive function receive the message.                             
    }
-   PROCEDURE XPLMSendMessageToPlugin(
+   procedure XPLMSendMessageToPlugin(
                                         inPlugin            : XPLMPluginID;    
                                         inMessage           : integer;    
                                         inParam             : pointer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {$IFDEF XPLM200}
 {___________________________________________________________________________
@@ -300,9 +253,6 @@ CONST
    should not expect a feature to be guaranteed present.                       
 }
 
-
-
-
    {
     XPLMFeatureEnumerator_f
     
@@ -310,8 +260,8 @@ CONST
     by a given version running version of X-Plane.  This routine is called once 
     for each feature.                                                           
    }
-TYPE
-     XPLMFeatureEnumerator_f = PROCEDURE(
+type
+     XPLMFeatureEnumerator_f = procedure(
                                     inFeature           : Pchar;    
                                     inRef               : pointer); cdecl;   
 
@@ -321,13 +271,9 @@ TYPE
     This returns 1 if the given installation of X-Plane supports a feature, or 
     0 if it does not.                                                           
    }
-   FUNCTION XPLMHasFeature(
+   function XPLMHasFeature(
                                         inFeature           : Pchar) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMIsFeatureEnabled
@@ -336,13 +282,9 @@ TYPE
     it is not enabled.  It is an error to call this routine with an unsupported 
     feature.                                                                    
    }
-   FUNCTION XPLMIsFeatureEnabled(
+   function XPLMIsFeatureEnabled(
                                         inFeature           : Pchar) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMEnableFeature
@@ -351,14 +293,10 @@ TYPE
     change the running behavior of X-Plane and your plugin in some way, 
     depending on the feature.                                                   
    }
-   PROCEDURE XPLMEnableFeature(
+   procedure XPLMEnableFeature(
                                         inFeature           : Pchar;    
                                         inEnable            : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMEnumerateFeatures
@@ -367,15 +305,11 @@ TYPE
     running version of X-Plane supports. Use this routine to determine all of 
     the features that X-Plane can support.                                      
    }
-   PROCEDURE XPLMEnumerateFeatures(
+   procedure XPLMEnumerateFeatures(
                                         inEnumerator        : XPLMFeatureEnumerator_f;    
                                         inRef               : pointer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
-{$ENDIF}
-IMPLEMENTATION
-END.
+implementation
+
+end.

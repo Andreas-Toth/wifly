@@ -6,8 +6,9 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPLMNavigation;
-INTERFACE
+unit XPLMNavigation;
+
+interface
 {
    XPLMNavigation - THEORY OF OPERATION 
    
@@ -21,19 +22,17 @@ INTERFACE
    is powered internally by x-plane's navigation database.                     
 }
 
-USES   XPLMDefs;
-   {$A4}
-{$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
-{$ENDIF}
+uses
+  XPLMDefs;
+
+{$A4}
+
 {___________________________________________________________________________
  * NAVIGATION DATABASE ACCESS
  ___________________________________________________________________________}
 {
                                                                                
 }
-
-
 
    {
     XPLMNavType
@@ -47,7 +46,7 @@ USES   XPLMDefs;
     FMS. Querying the FMS for navaids will return it.  Use 
     XPLMSetFMSEntryLatLon to set a lat/lon waypoint.                            
    }
-TYPE
+type
    XPLMNavType = (
       xplm_Nav_Unknown                         = 0
  
@@ -76,6 +75,7 @@ TYPE
      ,xplm_Nav_LatLon                          = 2048
  
    );
+
    PXPLMNavType = ^XPLMNavType;
 
    {
@@ -94,7 +94,7 @@ TYPE
    XPLMNavRef = integer;
    PXPLMNavRef = ^XPLMNavRef;
 
-CONST
+const
    XPLM_NAV_NOT_FOUND   = -1;
 
    {
@@ -104,12 +104,8 @@ CONST
     the entire database.  Returns XPLM_NAV_NOT_FOUND if the nav database is 
     empty.                                                                      
    }
-   FUNCTION XPLMGetFirstNavAid: XPLMNavRef;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMGetFirstNavAid: XPLMNavRef;
+                                        cdecl; external CLibName;
 
    {
     XPLMGetNextNavAid
@@ -123,13 +119,9 @@ CONST
     rendering settings screen, calling this routine with the last airport 
     returns a bogus nav aid.  Using this nav aid can crash x-plane.             
    }
-   FUNCTION XPLMGetNextNavAid(
+   function XPLMGetNextNavAid(
                                         inNavAidRef         : XPLMNavRef) : XPLMNavRef;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMFindFirstNavAidOfType
@@ -142,13 +134,9 @@ CONST
     rendering settings screen, calling this routine with fixes returns a bogus 
     nav aid.  Using this nav aid can crash x-plane.				                         
    }
-   FUNCTION XPLMFindFirstNavAidOfType(
+   function XPLMFindFirstNavAidOfType(
                                         inType              : XPLMNavType) : XPLMNavRef;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMFindLastNavAidOfType
@@ -161,13 +149,9 @@ CONST
     rendering settings screen, calling this routine with fixes returns a bogus 
     nav aid.  Using this nav aid can crash x-plane.								                     
    }
-   FUNCTION XPLMFindLastNavAidOfType(
+   function XPLMFindLastNavAidOfType(
                                         inType              : XPLMNavType) : XPLMNavRef;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMFindNavAid
@@ -196,18 +180,14 @@ CONST
     the VOR whose ID is "KBOS". Find the nearest airport whose name contains 
     "Chicago".                                                                  
    }
-   FUNCTION XPLMFindNavAid(
+   function XPLMFindNavAid(
                                         inNameFragment      : Pchar;    { Can be nil }
                                         inIDFragment        : Pchar;    { Can be nil }
                                         inLat               : Psingle;    { Can be nil }
                                         inLon               : Psingle;    { Can be nil }
                                         inFrequency         : Pinteger;    { Can be nil }
                                         inType              : XPLMNavType) : XPLMNavRef;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetNavAidInfo
@@ -228,7 +208,7 @@ CONST
     The parameter is a single byte value 1 for true or 0 for false, not a C 
     string.                                                                     
    }
-   PROCEDURE XPLMGetNavAidInfo(
+   procedure XPLMGetNavAidInfo(
                                         inRef               : XPLMNavRef;    
                                         outType             : PXPLMNavType;    { Can be nil }
                                         outLatitude         : Psingle;    { Can be nil }
@@ -239,11 +219,7 @@ CONST
                                         outID               : Pchar;    { Can be nil }
                                         outName             : Pchar;    { Can be nil }
                                         outReg              : Pchar);    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * FLIGHT MANAGEMENT COMPUTER
@@ -258,69 +234,47 @@ CONST
    waypoints in the flight plan.                                               
 }
 
-
-
    {
     XPLMCountFMSEntries
     
     This routine returns the number of entries in the FMS.                      
    }
-   FUNCTION XPLMCountFMSEntries: integer;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMCountFMSEntries: integer;
+                                        cdecl; external CLibName;
 
    {
     XPLMGetDisplayedFMSEntry
     
     This routine returns the index of the entry the pilot is viewing.           
    }
-   FUNCTION XPLMGetDisplayedFMSEntry: integer;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMGetDisplayedFMSEntry: integer;
+                                        cdecl; external CLibName;
 
    {
     XPLMGetDestinationFMSEntry
     
     This routine returns the index of the entry the FMS is flying to.           
    }
-   FUNCTION XPLMGetDestinationFMSEntry: integer;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMGetDestinationFMSEntry: integer;
+                                        cdecl; external CLibName;
 
    {
     XPLMSetDisplayedFMSEntry
     
     This routine changes which entry the FMS is showing to the index specified. 
        }
-   PROCEDURE XPLMSetDisplayedFMSEntry(
+   procedure XPLMSetDisplayedFMSEntry(
                                         inIndex             : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetDestinationFMSEntry
     
     This routine changes which entry the FMS is flying the aircraft toward.     
    }
-   PROCEDURE XPLMSetDestinationFMSEntry(
+   procedure XPLMSetDestinationFMSEntry(
                                         inIndex             : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetFMSEntryInfo
@@ -333,7 +287,7 @@ CONST
     XPLM_NAV_NOT_FOUND. FMS name entry buffers should be at least 256 chars in 
     length.                                                                     
    }
-   PROCEDURE XPLMGetFMSEntryInfo(
+   procedure XPLMGetFMSEntryInfo(
                                         inIndex             : integer;    
                                         outType             : PXPLMNavType;    { Can be nil }
                                         outID               : Pchar;    { Can be nil }
@@ -341,11 +295,7 @@ CONST
                                         outAltitude         : Pinteger;    { Can be nil }
                                         outLat              : Psingle;    { Can be nil }
                                         outLon              : Psingle);    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetFMSEntryInfo
@@ -355,15 +305,11 @@ CONST
     and radio-beacon navaids.  Currently of radio beacons, the FMS can only 
     support VORs and NDBs. Use the routines below to clear or fly to a lat/lon. 
    }
-   PROCEDURE XPLMSetFMSEntryInfo(
+   procedure XPLMSetFMSEntryInfo(
                                         inIndex             : integer;    
                                         inRef               : XPLMNavRef;    
                                         inAltitude          : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetFMSEntryLatLon
@@ -371,16 +317,12 @@ CONST
     This routine changes the entry in the FMS to a lat/lon entry with the given 
     coordinates.                                                                
    }
-   PROCEDURE XPLMSetFMSEntryLatLon(
+   procedure XPLMSetFMSEntryLatLon(
                                         inIndex             : integer;    
                                         inLat               : single;    
                                         inLon               : single;    
                                         inAltitude          : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMClearFMSEntry
@@ -388,13 +330,9 @@ CONST
     This routine clears the given entry, potentially shortening the flight 
     plan.                                                                       
    }
-   PROCEDURE XPLMClearFMSEntry(
+   procedure XPLMClearFMSEntry(
                                         inIndex             : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * GPS RECEIVER
@@ -403,32 +341,23 @@ CONST
    These APIs let you read data from the GPS unit.                             
 }
 
-
-
    {
     XPLMGetGPSDestinationType
     
     This routine returns the type of the currently selected GPS destination, 
     one of fix, airport, VOR or NDB.                                            
    }
-   FUNCTION XPLMGetGPSDestinationType: XPLMNavType;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMGetGPSDestinationType: XPLMNavType;
+                                       cdecl; external CLibName;
 
    {
     XPLMGetGPSDestination
     
     This routine returns the current GPS destination.                           
    }
-   FUNCTION XPLMGetGPSDestination: XPLMNavRef;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMGetGPSDestination: XPLMNavRef;
+                                       cdecl; external CLibName;
 
-IMPLEMENTATION
-END.
+implementation
+
+end.

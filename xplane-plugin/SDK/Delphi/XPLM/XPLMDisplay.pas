@@ -6,8 +6,9 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPLMDisplay;
-INTERFACE
+unit XPLMDisplay;
+
+interface
 {
    XPLM Display APIs - THEORY OF OPERATION 
    
@@ -66,11 +67,11 @@ INTERFACE
    of the sim.                                                                 
 }
 
-USES   XPLMDefs;
-   {$A4}
-{$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
-{$ENDIF}
+uses
+  XPLMDefs;
+
+{$A4}
+
 {___________________________________________________________________________
  * DRAWING CALLBACKS
  ___________________________________________________________________________}
@@ -83,8 +84,6 @@ USES   XPLMDefs;
    enumerations. Also do not assume that each drawing phase ends before 
    another begins; they may be nested.                                         
 }
-
-
 
    {
     XPLMDrawingPhase
@@ -100,7 +99,7 @@ USES   XPLMDefs;
     use of these codes, consult Austin and/or be prepared to revise your code 
     as X-Plane evolves.                                                         
    }
-TYPE
+type
    XPLMDrawingPhase = (
      { This is the earliest point at which you can draw in 3-d.                    }
       xplm_Phase_FirstScene                    = 0
@@ -155,6 +154,7 @@ TYPE
 {$ENDIF}
  
    );
+
    PXPLMDrawingPhase = ^XPLMDrawingPhase;
 
    {
@@ -172,7 +172,7 @@ TYPE
     will be in 'local' coordinates for 3d drawing and panel coordinates for 2d 
     drawing.  The OpenGL state (texturing, etc.) will be unknown.               
    }
-     XPLMDrawCallback_f = FUNCTION(
+     XPLMDrawCallback_f = function(
                                     inPhase             : XPLMDrawingPhase;    
                                     inIsBefore          : integer;    
                                     inRefcon            : pointer) : integer; cdecl;   
@@ -198,7 +198,7 @@ TYPE
     (that is 0x80 instead of -0x80).  So you may need to cast the incoming vkey 
     to an unsigned char to get correct comparisons in C.                        
    }
-     XPLMKeySniffer_f = FUNCTION(
+     XPLMKeySniffer_f = function(
                                     inChar              : char;    
                                     inFlags             : XPLMKeyFlags;    
                                     inVirtualKey        : char;    
@@ -214,16 +214,12 @@ TYPE
     callback multiple times for the same or different phases as long as the 
     refcon is unique each time.                                                 
    }
-   FUNCTION XPLMRegisterDrawCallback(
+   function XPLMRegisterDrawCallback(
                                         inCallback          : XPLMDrawCallback_f;    
                                         inPhase             : XPLMDrawingPhase;    
                                         inWantsBefore       : integer;    
                                         inRefcon            : pointer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMUnregisterDrawCallback
@@ -233,16 +229,12 @@ TYPE
     times with different refcons.  The routine returns 1 if it can find the 
     callback to unregister, 0 otherwise.                                        
    }
-   FUNCTION XPLMUnregisterDrawCallback(
+   function XPLMUnregisterDrawCallback(
                                         inCallback          : XPLMDrawCallback_f;    
                                         inPhase             : XPLMDrawingPhase;    
                                         inWantsBefore       : integer;    
                                         inRefcon            : pointer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMRegisterKeySniffer
@@ -255,15 +247,11 @@ TYPE
     action based on the key will produce very weird results.  Returns 1 if 
     successful.                                                                 
    }
-   FUNCTION XPLMRegisterKeySniffer(
+   function XPLMRegisterKeySniffer(
                                         inCallback          : XPLMKeySniffer_f;    
                                         inBeforeWindows     : integer;    
                                         inRefcon            : pointer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMUnregisterKeySniffer
@@ -272,15 +260,11 @@ TYPE
     for every time you register one with the exact same signature.  Returns 1 
     if successful.                                                              
    }
-   FUNCTION XPLMUnregisterKeySniffer(
+   function XPLMUnregisterKeySniffer(
                                         inCallback          : XPLMKeySniffer_f;    
                                         inBeforeWindows     : integer;    
                                         inRefcon            : pointer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * WINDOW API
@@ -304,7 +288,7 @@ TYPE
     the mouse up message.  All of these messages will be directed to the same 
     window.                                                                     
    }
-TYPE
+type
    XPLMMouseStatus = (
       xplm_MouseDown                           = 1
  
@@ -313,6 +297,7 @@ TYPE
      ,xplm_MouseUp                             = 3
  
    );
+
    PXPLMMouseStatus = ^XPLMMouseStatus;
 
 {$IFDEF XPLM200}
@@ -336,6 +321,7 @@ TYPE
      ,xplm_CursorCustom                        = 3
  
    );
+
    PXPLMCursorStatus = ^XPLMCursorStatus;
 {$ENDIF}
 
@@ -359,7 +345,7 @@ TYPE
     drawing your window over a background, you can make a translucent window 
     easily by simply not filling in your entire window's bounds.                
    }
-     XPLMDrawWindow_f = PROCEDURE(
+     XPLMDrawWindow_f = procedure(
                                     inWindowID          : XPLMWindowID;    
                                     inRefcon            : pointer); cdecl;   
 
@@ -375,7 +361,7 @@ TYPE
     -0x80).  So you may need to cast the incoming vkey to an unsigned char to 
     get correct comparisons in C.                                               
    }
-     XPLMHandleKey_f = PROCEDURE(
+     XPLMHandleKey_f = procedure(
                                     inWindowID          : XPLMWindowID;    
                                     inKey               : char;    
                                     inFlags             : XPLMKeyFlags;    
@@ -394,7 +380,7 @@ TYPE
     WARNING: passing clicks through windows (as of this writing) causes mouse 
     tracking problems in X-Plane; do not use this feature!                      
    }
-     XPLMHandleMouseClick_f = FUNCTION(
+     XPLMHandleMouseClick_f = function(
                                     inWindowID          : XPLMWindowID;    
                                     x                   : integer;    
                                     y                   : integer;    
@@ -423,7 +409,7 @@ TYPE
     OS specific call like SetThemeCursor (Mac) or SetCursor/LoadCursor 
     (Windows).                                                                  
    }
-     XPLMHandleCursor_f = FUNCTION(
+     XPLMHandleCursor_f = function(
                                     inWindowID          : XPLMWindowID;    
                                     x                   : integer;    
                                     y                   : integer;    
@@ -442,7 +428,7 @@ TYPE
     callback. The wheel is 0 for the vertical axis or 1 for the horizontal axis 
     (for OS/mouse combinations that support this).                              
    }
-     XPLMHandleMouseWheel_f = FUNCTION(
+     XPLMHandleMouseWheel_f = function(
                                     inWindowID          : XPLMWindowID;    
                                     x                   : integer;    
                                     y                   : integer;    
@@ -460,7 +446,7 @@ TYPE
     in future SDK APIs to include more features.  Always set the structSize 
     member to the size of your struct in bytes!                                 
    }
-   XPLMCreateWindow_t = RECORD
+   XPLMCreateWindow_t = record
      structSize               : integer;
      left                     : integer;
      top                      : integer;
@@ -473,7 +459,8 @@ TYPE
      handleCursorFunc         : XPLMHandleCursor_f;
      handleMouseWheelFunc     : XPLMHandleMouseWheel_f;
      refcon                   : pointer;
-   END;
+   end;
+
    PXPLMCreateWindow_t = ^XPLMCreateWindow_t;
 {$ENDIF}
 
@@ -487,14 +474,10 @@ TYPE
     number can be used to get a rough idea of the amount of detail the user 
     will be able to see when drawing in 3-d.                                    
    }
-   PROCEDURE XPLMGetScreenSize(
+   procedure XPLMGetScreenSize(
                                         outWidth            : Pinteger;    { Can be nil }
                                         outHeight           : Pinteger);    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetMouseLocation
@@ -503,14 +486,10 @@ TYPE
     bottom left corner of the display is 0,0.  Pass NULL to not receive info 
     about either parameter.                                                     
    }
-   PROCEDURE XPLMGetMouseLocation(
+   procedure XPLMGetMouseLocation(
                                         outX                : Pinteger;    { Can be nil }
                                         outY                : Pinteger);    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMCreateWindow
@@ -525,7 +504,7 @@ TYPE
     background and frame of the window.  Higher level libraries have routines 
     which make this easy.                                                       
    }
-   FUNCTION XPLMCreateWindow(
+   function XPLMCreateWindow(
                                         inLeft              : integer;    
                                         inTop               : integer;    
                                         inRight             : integer;    
@@ -535,11 +514,7 @@ TYPE
                                         inKeyCallback       : XPLMHandleKey_f;    
                                         inMouseCallback     : XPLMHandleMouseClick_f;    
                                         inRefcon            : pointer) : XPLMWindowID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {$IFDEF XPLM200}
    {
@@ -553,13 +528,9 @@ TYPE
     the default values.)  The numeric values of the XPMCreateWindow_t structure 
     correspond to the parameters of XPLMCreateWindow.                           
    }
-   FUNCTION XPLMCreateWindowEx(
+   function XPLMCreateWindowEx(
                                         inParams            : PXPLMCreateWindow_t) : XPLMWindowID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 {$ENDIF}
 
    {
@@ -568,13 +539,9 @@ TYPE
     This routine destroys a window.  The callbacks are not called after this 
     call. Keyboard focus is removed from the window before destroying it.       
    }
-   PROCEDURE XPLMDestroyWindow(
+   procedure XPLMDestroyWindow(
                                         inWindowID          : XPLMWindowID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetWindowGeometry
@@ -582,61 +549,45 @@ TYPE
     This routine returns the position and size of a window in cockpit pixels.  
     Pass NULL to not receive any paramter.                                      
    }
-   PROCEDURE XPLMGetWindowGeometry(
+   procedure XPLMGetWindowGeometry(
                                         inWindowID          : XPLMWindowID;    
                                         outLeft             : Pinteger;    { Can be nil }
                                         outTop              : Pinteger;    { Can be nil }
                                         outRight            : Pinteger;    { Can be nil }
                                         outBottom           : Pinteger);    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetWindowGeometry
     
     This routine allows you to set the position or height aspects of a window.  
    }
-   PROCEDURE XPLMSetWindowGeometry(
+   procedure XPLMSetWindowGeometry(
                                         inWindowID          : XPLMWindowID;    
                                         inLeft              : integer;    
                                         inTop               : integer;    
                                         inRight             : integer;    
                                         inBottom            : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetWindowIsVisible
     
     This routine returns whether a window is visible.                           
    }
-   FUNCTION XPLMGetWindowIsVisible(
+   function XPLMGetWindowIsVisible(
                                         inWindowID          : XPLMWindowID) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetWindowIsVisible
     
     This routine shows or hides a window.                                       
    }
-   PROCEDURE XPLMSetWindowIsVisible(
+   procedure XPLMSetWindowIsVisible(
                                         inWindowID          : XPLMWindowID;    
                                         inIsVisible         : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetWindowRefCon
@@ -644,13 +595,9 @@ TYPE
     This routine returns a windows refcon, the unique value you can use for 
     your own purposes.                                                          
    }
-   FUNCTION XPLMGetWindowRefCon(
+   function XPLMGetWindowRefCon(
                                         inWindowID          : XPLMWindowID) : pointer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetWindowRefCon
@@ -658,14 +605,10 @@ TYPE
     This routine sets a window's reference constant.  Use this to pass data to 
     yourself in the callbacks.                                                  
    }
-   PROCEDURE XPLMSetWindowRefCon(
+   procedure XPLMSetWindowRefCon(
                                         inWindowID          : XPLMWindowID;    
                                         inRefcon            : pointer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMTakeKeyboardFocus
@@ -674,13 +617,9 @@ TYPE
     sent to  that window.  Pass a window ID of 0 to pass keyboard strokes 
     directly to X-Plane.                                                        
    }
-   PROCEDURE XPLMTakeKeyboardFocus(
+   procedure XPLMTakeKeyboardFocus(
                                         inWindow            : XPLMWindowID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMBringWindowToFront
@@ -689,13 +628,9 @@ TYPE
     brought to the front when they are created...beyond that you should make 
     sure you are front before handling mouse clicks.                            
    }
-   PROCEDURE XPLMBringWindowToFront(
+   procedure XPLMBringWindowToFront(
                                         inWindow            : XPLMWindowID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMIsWindowInFront
@@ -703,13 +638,9 @@ TYPE
     This routine returns true if you pass inthe ID of the frontmost visible 
     window.                                                                     
    }
-   FUNCTION XPLMIsWindowInFront(
+   function XPLMIsWindowInFront(
                                         inWindow            : XPLMWindowID) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * HOT KEYS
@@ -725,8 +656,8 @@ TYPE
     
     Your hot key callback simply takes a pointer of your choosing.              
    }
-TYPE
-     XPLMHotKey_f = PROCEDURE(
+type
+    XPLMHotKey_f = procedure(
                                     inRefcon            : pointer); cdecl;   
 
    {
@@ -747,55 +678,39 @@ TYPE
     returned.  During execution, the actual key associated with your hot key 
     may change, but you are insulated from this.                                
    }
-   FUNCTION XPLMRegisterHotKey(
+   function XPLMRegisterHotKey(
                                         inVirtualKey        : char;    
                                         inFlags             : XPLMKeyFlags;    
                                         inDescription       : Pchar;    
                                         inCallback          : XPLMHotKey_f;    
                                         inRefcon            : pointer) : XPLMHotKeyID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMUnregisterHotKey
     
     This API unregisters a hot key.  You can only register your own hot keys.   
    }
-   PROCEDURE XPLMUnregisterHotKey(
+   procedure XPLMUnregisterHotKey(
                                         inHotKey            : XPLMHotKeyID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMCountHotKeys
     
     Returns the number of current hot keys.                                     
    }
-   FUNCTION XPLMCountHotKeys: integer;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMCountHotKeys: integer;
+                                        cdecl; external CLibName;
 
    {
     XPLMGetNthHotKey
     
     Returns a hot key by index, for iteration on all hot keys.                  
    }
-   FUNCTION XPLMGetNthHotKey(
+   function XPLMGetNthHotKey(
                                         inIndex             : integer) : XPLMHotKeyID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetHotKeyInfo
@@ -803,17 +718,13 @@ TYPE
     Returns information about the hot key.  Return NULL for any  parameter you 
     don't want info about.  The description should be at least 512 chars long.  
    }
-   PROCEDURE XPLMGetHotKeyInfo(
+   procedure XPLMGetHotKeyInfo(
                                         inHotKey            : XPLMHotKeyID;    
                                         outVirtualKey       : Pchar;    { Can be nil }
                                         outFlags            : PXPLMKeyFlags;    { Can be nil }
                                         outDescription      : Pchar;    { Can be nil }
                                         outPlugin           : PXPLMPluginID);    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetHotKeyCombination
@@ -821,15 +732,12 @@ TYPE
     XPLMSetHotKeyCombination remaps a hot keys keystrokes.  You may remap 
     another plugin's keystrokes.                                                
    }
-   PROCEDURE XPLMSetHotKeyCombination(
+   procedure XPLMSetHotKeyCombination(
                                         inHotKey            : XPLMHotKeyID;    
                                         inVirtualKey        : char;    
                                         inFlags             : XPLMKeyFlags);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
-IMPLEMENTATION
-END.
+implementation
+
+end.

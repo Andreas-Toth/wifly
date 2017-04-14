@@ -6,17 +6,18 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPLMScenery;
-INTERFACE
+unit XPLMScenery;
+
+interface
 {
    This package contains APIs to interact with X-Plane's scenery system.       
 }
 
-USES   XPLMDefs;
-   {$A4}
-{$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
-{$ENDIF}
+uses
+  XPLMDefs;
+
+{$A4}
+
 {$IFDEF XPLM200}
 {___________________________________________________________________________
  * Terrain Y-Testing
@@ -48,9 +49,6 @@ USES   XPLMDefs;
    will return the height of a 0 MSL sphere.                                   
 }
 
-
-
-
    {
     XPLMProbeType
     
@@ -58,13 +56,14 @@ USES   XPLMDefs;
     different algorithm.  (Only one type of probe is provided right now, but 
     future APIs will expose more flexible or poewrful or useful probes.         
    }
-TYPE
+type
    XPLMProbeType = (
      { The Y probe gives you the location of the tallest physical scenery along    }
      { the Y axis going through the queried point.                                 }
       xplm_ProbeY                              = 0
  
    );
+
    PXPLMProbeType = ^XPLMProbeType;
 
    {
@@ -85,6 +84,7 @@ TYPE
      ,xplm_ProbeMissed                         = 2
  
    );
+
    PXPLMProbeResult = ^XPLMProbeResult;
 
    {
@@ -102,7 +102,7 @@ TYPE
     XPLMProbeInfo_t contains the results of a probe call.  Make sure to set 
     structSize to the size of the struct before using it.                       
    }
-   XPLMProbeInfo_t = RECORD
+   XPLMProbeInfo_t = record
      { Size of structure in bytes - always set this before calling the XPLM.       }
      structSize               : integer;
      { Resulting X location of the terrain point we hit, in local OpenGL           }
@@ -128,7 +128,8 @@ TYPE
      velocityZ                : single;
      { Tells if the surface we hit is water (otherwise it is land).                }
      is_wet                   : integer;
-   END;
+   end;
+
    PXPLMProbeInfo_t = ^XPLMProbeInfo_t;
 
    {
@@ -136,26 +137,18 @@ TYPE
     
     Creates a new probe object of a given type and returns.                     
    }
-   FUNCTION XPLMCreateProbe(
+   function XPLMCreateProbe(
                                         inProbeType         : XPLMProbeType) : XPLMProbeRef;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMDestroyProbe
     
     Deallocates an existing probe object.                                       
    }
-   PROCEDURE XPLMDestroyProbe(
+   procedure XPLMDestroyProbe(
                                         inProbe             : XPLMProbeRef);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMProbeTerrainXYZ
@@ -165,19 +158,15 @@ TYPE
     properly.  Other fields are filled in if we hit terrain, and a probe result 
     is returned.                                                                
    }
-   FUNCTION XPLMProbeTerrainXYZ(
+   function XPLMProbeTerrainXYZ(
                                         inProbe             : XPLMProbeRef;    
                                         inX                 : single;    
                                         inY                 : single;    
                                         inZ                 : single;    
                                         outInfo             : PXPLMProbeInfo_t) : XPLMProbeResult;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
+                                        cdecl; external CLibName;
 {$ENDIF}
 
-{$ENDIF}
 {___________________________________________________________________________
  * Object Drawing
  ___________________________________________________________________________}
@@ -188,10 +177,8 @@ TYPE
    every successful call to XPLMLoadObject with a call to XPLMUnloadObject!    
 }
 
-
-
 {$IFDEF XPLM200}
-TYPE
+type
    {
     XPLMObjectRef
     
@@ -210,7 +197,7 @@ TYPE
     is to be drawn. Be sure to set structSize to the size of the structure for 
     future expansion.                                                           
    }
-   XPLMDrawInfo_t = RECORD
+   XPLMDrawInfo_t = record
      { Set this to the size of this structure!                                     }
      structSize               : integer;
      { X location of the object in local coordinates.                              }
@@ -225,7 +212,8 @@ TYPE
      heading                  : single;
      { Roll to rotate the object.                                                  }
      roll                     : single;
-   END;
+   end;
+
    PXPLMDrawInfo_t = ^XPLMDrawInfo_t;
 {$ENDIF}
 
@@ -242,7 +230,7 @@ TYPE
     plugin is re-enabled.  If your plugin is unloaded before this callback is 
     ever called, the SDK will release the object handle for you.                
    }
-     XPLMObjectLoaded_f = PROCEDURE(
+     XPLMObjectLoaded_f = procedure(
                                     inObject            : XPLMObjectRef;    
                                     inRefcon            : pointer); cdecl;   
 {$ENDIF}
@@ -271,13 +259,9 @@ TYPE
     loaded before you load the object.  For this reason it may be necessary to 
     defer object loading until the sim has fully started.                       
    }
-   FUNCTION XPLMLoadObject(
+   function XPLMLoadObject(
                                         inPath              : Pchar) : XPLMObjectRef;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 {$ENDIF}
 
 {$IFDEF XPLM210}
@@ -297,15 +281,11 @@ TYPE
     the load to complete and then release the object if it is no longer 
     desired.                                                                    
    }
-   PROCEDURE XPLMLoadObjectAsync(
+   procedure XPLMLoadObjectAsync(
                                         inPath              : Pchar;    
                                         inCallback          : XPLMObjectLoaded_f;    
                                         inRefcon            : pointer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 {$ENDIF}
 
 {$IFDEF XPLM200}
@@ -332,17 +312,13 @@ TYPE
     pointing down the -Z axis and the Y axis of the object matches the local 
     coordinate Y axis.                                                          
    }
-   PROCEDURE XPLMDrawObjects(
+   procedure XPLMDrawObjects(
                                         inObject            : XPLMObjectRef;    
                                         inCount             : integer;    
                                         inLocations         : PXPLMDrawInfo_t;    
                                         lighting            : integer;    
                                         earth_relative      : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 {$ENDIF}
 
 {$IFDEF XPLM200}
@@ -354,13 +330,9 @@ TYPE
     purged from memory.  Make sure to call XPLMUnloadObject once for each 
     successful call to XPLMLoadObject.                                          
    }
-   PROCEDURE XPLMUnloadObject(
+   procedure XPLMUnloadObject(
                                         inObject            : XPLMObjectRef);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 {$ENDIF}
 
 {$IFDEF XPLM200}
@@ -374,9 +346,6 @@ TYPE
    system.                                                                     
 }
 
-
-
-
    {
     XPLMLibraryEnumerator_f
     
@@ -384,8 +353,8 @@ TYPE
     for each library element that is located. The returned paths will be 
     relative to the X-System folder.                                            
    }
-TYPE
-     XPLMLibraryEnumerator_f = PROCEDURE(
+type
+     XPLMLibraryEnumerator_f = procedure(
                                     inFilePath          : Pchar;    
                                     inRef               : pointer); cdecl;   
 
@@ -402,18 +371,16 @@ TYPE
     objects to certain local locations.  Only objects that are allowed at the 
     latitude/longitude you provide will be returned.                            
    }
-   FUNCTION XPLMLookupObjects(
+   function XPLMLookupObjects(
                                         inPath              : Pchar;    
                                         inLatitude          : single;    
                                         inLongitude         : single;    
                                         enumerator          : XPLMLibraryEnumerator_f;    
                                         ref                 : pointer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {$ENDIF}
-IMPLEMENTATION
-END.
+
+implementation
+
+end.

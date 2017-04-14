@@ -6,8 +6,9 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPWidgets;
-INTERFACE
+unit XPWidgets;
+
+interface
 {
    WIDGETS - THEORY OF OPERATION AND NOTES 
    
@@ -76,18 +77,17 @@ INTERFACE
    imlemented as XPLMDisply windows.                                           
 }
 
-USES   XPWidgetDefs;
-   {$A4}
-{$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
-{$ENDIF}
+uses
+  XPWidgetDefs;
+
+{$A4}
+
 {___________________________________________________________________________
  * WIDGET CREATION AND MANAGEMENT
  ___________________________________________________________________________}
 {
                                                                                
 }
-
 
    {
     XPCreateWidget
@@ -125,7 +125,7 @@ USES   XPWidgetDefs;
     are simply not called.   You can preconstruct widget trees and then place 
     them into root widgets later to activate them if you wish.                  
    }
-   FUNCTION XPCreateWidget(
+   function XPCreateWidget(
                                         inLeft              : integer;    
                                         inTop               : integer;    
                                         inRight             : integer;    
@@ -135,11 +135,7 @@ USES   XPWidgetDefs;
                                         inIsRoot            : integer;    
                                         inContainer         : XPWidgetID;    
                                         inClass             : XPWidgetClass) : XPWidgetID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPCreateCustomWidget
@@ -150,7 +146,7 @@ USES   XPWidgetDefs;
     the same as XPCreateWidget, except that the widget class has been replaced 
     with the widget function.                                                   
    }
-   FUNCTION XPCreateCustomWidget(
+   function XPCreateCustomWidget(
                                         inLeft              : integer;    
                                         inTop               : integer;    
                                         inRight             : integer;    
@@ -160,11 +156,7 @@ USES   XPWidgetDefs;
                                         inIsRoot            : integer;    
                                         inContainer         : XPWidgetID;    
                                         inCallback          : XPWidgetFunc_t) : XPWidgetID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPDestroyWidget
@@ -176,14 +168,10 @@ USES   XPWidgetDefs;
     destruction will recurse down the  widget tree.)  If you pass 0 for this 
     flag, the child widgets will simply end up with their parent set to 0.      
    }
-   PROCEDURE XPDestroyWidget(
+   procedure XPDestroyWidget(
                                         inWidget            : XPWidgetID;    
                                         inDestroyChildren   : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPSendMessageToWidget
@@ -201,17 +189,13 @@ USES   XPWidgetDefs;
     widget  function from the most recently installed to the oldest one 
     receives the message in order until it is handled.                          
    }
-   FUNCTION XPSendMessageToWidget(
+   function XPSendMessageToWidget(
                                         inWidget            : XPWidgetID;    
                                         inMessage           : XPWidgetMessage;    
                                         inMode              : XPDispatchMode;    
                                         inParam1            : intptr_t;    
                                         inParam2            : intptr_t) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * WIDGET POSITIONING AND VISIBILITY
@@ -219,7 +203,6 @@ USES   XPWidgetDefs;
 {
                                                                                
 }
-
 
    {
     XPPlaceWidgetWithin
@@ -238,27 +221,19 @@ USES   XPWidgetDefs;
     reposition the subwidget for you, otherwise you must do it with 
     SetWidgetGeometry.                                                          
    }
-   PROCEDURE XPPlaceWidgetWithin(
+   procedure XPPlaceWidgetWithin(
                                         inSubWidget         : XPWidgetID;    
                                         inContainer         : XPWidgetID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPCountChildWidgets
     
     This routine returns the number of widgets another widget contains.         
    }
-   FUNCTION XPCountChildWidgets(
+   function XPCountChildWidgets(
                                         inWidget            : XPWidgetID) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPGetNthChildWidget
@@ -267,14 +242,10 @@ USES   XPWidgetDefs;
     0 based, from 0 to one minus the number of widgets in the parent, 
     inclusive.  If the index is invalid, 0 is returned.                         
    }
-   FUNCTION XPGetNthChildWidget(
+   function XPGetNthChildWidget(
                                         inWidget            : XPWidgetID;    
                                         inIndex             : integer) : XPWidgetID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPGetParentWidget
@@ -282,13 +253,9 @@ USES   XPWidgetDefs;
     This routine returns the parent of a widget, or 0 if the widget has no 
     parent.   Root widgets never have parents and therefore always return 0.    
    }
-   FUNCTION XPGetParentWidget(
+   function XPGetParentWidget(
                                         inWidget            : XPWidgetID) : XPWidgetID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPShowWidget
@@ -297,13 +264,9 @@ USES   XPWidgetDefs;
     widget is not in a rooted widget hierarchy or one of its parents is not 
     visible, it will  still not be visible to the user.                         
    }
-   PROCEDURE XPShowWidget(
+   procedure XPShowWidget(
                                         inWidget            : XPWidgetID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPHideWidget
@@ -311,13 +274,9 @@ USES   XPWidgetDefs;
     Makes a widget invisible.  See XPShowWidget for considerations of when a 
     widget might not be visible despite its own visibility state.               
    }
-   PROCEDURE XPHideWidget(
+   procedure XPHideWidget(
                                         inWidget            : XPWidgetID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPIsWidgetVisible
@@ -326,13 +285,9 @@ USES   XPWidgetDefs;
     routine takes into consideration whether a parent is invisible.  Use this 
     routine to tell if the user can see the widget.                             
    }
-   FUNCTION XPIsWidgetVisible(
+   function XPIsWidgetVisible(
                                         inWidget            : XPWidgetID) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPFindRootWidget
@@ -341,13 +296,9 @@ USES   XPWidgetDefs;
     passed in widget or NULL if the passed in widget is not in a rooted 
     hierarchy.                                                                  
    }
-   FUNCTION XPFindRootWidget(
+   function XPFindRootWidget(
                                         inWidget            : XPWidgetID) : XPWidgetID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPBringRootWidgetToFront
@@ -358,13 +309,9 @@ USES   XPWidgetDefs;
     is not in an active widget hiearchy (e.g. there is no root widget at the 
     top of the tree), this routine does nothing.                                
    }
-   PROCEDURE XPBringRootWidgetToFront(
+   procedure XPBringRootWidgetToFront(
                                         inWidget            : XPWidgetID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPIsWidgetInFront
@@ -373,13 +320,9 @@ USES   XPWidgetDefs;
     hierarchy. It returns false if the widget's hierarchy is not in front, or 
     if the widget is not in a rooted hierarchy.                                 
    }
-   FUNCTION XPIsWidgetInFront(
+   function XPIsWidgetInFront(
                                         inWidget            : XPWidgetID) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPGetWidgetGeometry
@@ -387,34 +330,26 @@ USES   XPWidgetDefs;
     This routine returns the bounding box of a widget in global coordinates. 
     Pass NULL for any parameter you are not interested in.                      
    }
-   PROCEDURE XPGetWidgetGeometry(
+   procedure XPGetWidgetGeometry(
                                         inWidget            : XPWidgetID;    
                                         outLeft             : Pinteger;    { Can be nil }
                                         outTop              : Pinteger;    { Can be nil }
                                         outRight            : Pinteger;    { Can be nil }
                                         outBottom           : Pinteger);    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPSetWidgetGeometry
     
     This function changes the bounding box of a widget.                         
    }
-   PROCEDURE XPSetWidgetGeometry(
+   procedure XPSetWidgetGeometry(
                                         inWidget            : XPWidgetID;    
                                         inLeft              : integer;    
                                         inTop               : integer;    
                                         inRight             : integer;    
                                         inBottom            : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPGetWidgetForLocation
@@ -433,17 +368,13 @@ USES   XPWidgetDefs;
     geometry.  The  parent geometry limits the child's eligibility for mouse 
     location.                                                                   
    }
-   FUNCTION XPGetWidgetForLocation(
+   function XPGetWidgetForLocation(
                                         inContainer         : XPWidgetID;    
                                         inXOffset           : integer;    
                                         inYOffset           : integer;    
                                         inRecursive         : integer;    
                                         inVisibleOnly       : integer) : XPWidgetID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPGetWidgetExposedGeometry
@@ -456,17 +387,13 @@ USES   XPWidgetDefs;
     draw into.  Note that the widget library does not use OpenGL clipping to 
     keep frame rates up, although you could use it internally.                  
    }
-   PROCEDURE XPGetWidgetExposedGeometry(
+   procedure XPGetWidgetExposedGeometry(
                                         inWidgetID          : XPWidgetID;    
                                         outLeft             : Pinteger;    { Can be nil }
                                         outTop              : Pinteger;    { Can be nil }
                                         outRight            : Pinteger;    { Can be nil }
                                         outBottom           : Pinteger);    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * ACCESSING WIDGET DATA
@@ -474,7 +401,6 @@ USES   XPWidgetDefs;
 {
                                                                                
 }
-
 
    {
     XPSetWidgetDescriptor
@@ -487,14 +413,10 @@ USES   XPWidgetDefs;
     and convenient way to get at it.  While not all UI widgets need their 
     descriptor, many do.                                                        
    }
-   PROCEDURE XPSetWidgetDescriptor(
+   procedure XPSetWidgetDescriptor(
                                         inWidget            : XPWidgetID;    
                                         inDescriptor        : Pchar);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPGetWidgetDescriptor
@@ -507,15 +429,11 @@ USES   XPWidgetDefs;
     descriptor exceeds your buffer length, the buffer will not be null 
     terminated (this routine has 'strncpy' semantics).                          
    }
-   FUNCTION XPGetWidgetDescriptor(
+   function XPGetWidgetDescriptor(
                                         inWidget            : XPWidgetID;    
                                         outDescriptor       : Pchar;    
                                         inMaxDescLength     : integer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPSetWidgetProperty
@@ -523,15 +441,11 @@ USES   XPWidgetDefs;
     This function sets a widget's property.  Properties are arbitrary values 
     associated by a widget by ID.                                               
    }
-   PROCEDURE XPSetWidgetProperty(
+   procedure XPSetWidgetProperty(
                                         inWidget            : XPWidgetID;    
                                         inProperty          : XPWidgetPropertyID;    
                                         inValue             : intptr_t);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPGetWidgetProperty
@@ -542,15 +456,11 @@ USES   XPWidgetDefs;
     returned in the int.  Pass NULL for inExists if you do not need this 
     information. 						                                                         
    }
-   FUNCTION XPGetWidgetProperty(
+   function XPGetWidgetProperty(
                                         inWidget            : XPWidgetID;    
                                         inProperty          : XPWidgetPropertyID;    
                                         inExists            : Pinteger) : intptr_t;    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * KEYBOARD MANAGEMENT
@@ -558,7 +468,6 @@ USES   XPWidgetDefs;
 {
                                                                                
 }
-
 
    {
     XPSetKeyboardFocus
@@ -577,13 +486,9 @@ USES   XPWidgetDefs;
     setting to x-plane, keyboard focus is always accepted. 
     
        }
-   FUNCTION XPSetKeyboardFocus(
+   function XPSetKeyboardFocus(
                                         inWidget            : XPWidgetID) : XPWidgetID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLoseKeyboardFocus
@@ -592,13 +497,9 @@ USES   XPWidgetDefs;
     parent, or the next parent that will accept it.  This routine does nothing 
     if this widget does not have focus.                                         
    }
-   PROCEDURE XPLoseKeyboardFocus(
+   procedure XPLoseKeyboardFocus(
                                         inWidget            : XPWidgetID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPGetWidgetWithFocus
@@ -607,12 +508,8 @@ USES   XPWidgetDefs;
     has keyboard focus or some other plugin window that does not have widgets 
     has focus.                                                                  
    }
-   FUNCTION XPGetWidgetWithFocus: XPWidgetID;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPGetWidgetWithFocus: XPWidgetID;
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * CREATING CUSTOM WIDGETS
@@ -620,7 +517,6 @@ USES   XPWidgetDefs;
 {
                                                                                
 }
-
 
    {
     XPAddWidgetCallback
@@ -638,14 +534,10 @@ USES   XPWidgetDefs;
     second hook that only handles certain widget messages, you can customize or 
     extend widget behavior.                                                     
    }
-   PROCEDURE XPAddWidgetCallback(
+   procedure XPAddWidgetCallback(
                                         inWidget            : XPWidgetID;    
                                         inNewCallback       : XPWidgetFunc_t);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPGetWidgetClassFunc
@@ -653,13 +545,10 @@ USES   XPWidgetDefs;
     Given a widget class, this function returns the callbacks that power that 
     widget class.                                                               
    }
-   FUNCTION XPGetWidgetClassFunc(
+   function XPGetWidgetClassFunc(
                                         inWidgetClass       : XPWidgetClass) : XPWidgetFunc_t;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
-IMPLEMENTATION
-END.
+implementation
+
+end.

@@ -6,8 +6,9 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPWidgetUtils;
-INTERFACE
+unit XPWidgetUtils;
+
+interface
 {
    XPWidgetUtils - USAGE NOTES 
    
@@ -31,19 +32,17 @@ INTERFACE
    1, that means it handled the event and you don't need to; simply return 1.  
 }
 
-USES   XPWidgetDefs;
-   {$A4}
-{$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
-{$ENDIF}
+uses
+  XPWidgetDefs;
+
+{$A4}
+
 {___________________________________________________________________________
  * GENERAL UTILITIES
  ___________________________________________________________________________}
 {
                                                                                
 }
-
-
 
    {
     XPWidgetCreate_t
@@ -59,8 +58,8 @@ USES   XPWidgetDefs;
     NULL. If the container index is PARAM_PARENT, the widget passed into 
     XPUCreateWidgets is used.                                                   
    }
-TYPE
-   XPWidgetCreate_t = RECORD
+type
+   XPWidgetCreate_t = record
      left                     : integer;
      top                      : integer;
      right                    : integer;
@@ -70,14 +69,14 @@ TYPE
      isRoot                   : integer;
      containerIndex           : integer;
      widgetClass              : XPWidgetClass;
-   END;
+   end;
+
    PXPWidgetCreate_t = ^XPWidgetCreate_t;
 
-CONST
+const
    NO_PARENT            = -1;
 
    PARAM_PARENT         = -2;
-
 
    {
     XPUCreateWidgets
@@ -95,16 +94,12 @@ CONST
     is listed as PARAM_PARENT; this allows you to embed widgets created with  
     XPUCreateWidgets in a widget created previously.                            
    }
-   PROCEDURE XPUCreateWidgets(
+   procedure XPUCreateWidgets(
                                         inWidgetDefs        : PXPWidgetCreate_t;    
                                         inCount             : integer;    
                                         inParamParent       : XPWidgetID;    
                                         ioWidgets           : PXPWidgetID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPUMoveWidgetBy
@@ -112,15 +107,11 @@ CONST
     Simply moves a widget by an amount, +x = right, +y=up, without resizing the 
     widget.                                                                     
    }
-   PROCEDURE XPUMoveWidgetBy(
+   procedure XPUMoveWidgetBy(
                                         inWidget            : XPWidgetID;    
                                         inDeltaX            : integer;    
                                         inDeltaY            : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * LAYOUT MANAGERS
@@ -131,8 +122,6 @@ CONST
    attached to a widget later.                                                 
 }
 
-
-
    {
     XPUFixedLayout
     
@@ -140,16 +129,12 @@ CONST
     relative to itself as it is resized.  Use this on the top level 'window' 
     widget for your window.                                                     
    }
-   FUNCTION XPUFixedLayout(
+   function XPUFixedLayout(
                                         inMessage           : XPWidgetMessage;    
                                         inWidget            : XPWidgetID;    
                                         inParam1            : intptr_t;    
                                         inParam2            : intptr_t) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * WIDGET PROC BEHAVIORS
@@ -160,26 +145,20 @@ CONST
    your widget function.                                                       
 }
 
-
-
-   {
+    {
     XPUSelectIfNeeded
     
     This causes the widget to bring its window to the foreground if it is not 
     already.  inEatClick specifies whether clicks in the background should be 
     consumed by bringin the window to the foreground.                           
    }
-   FUNCTION XPUSelectIfNeeded(
+   function XPUSelectIfNeeded(
                                         inMessage           : XPWidgetMessage;    
                                         inWidget            : XPWidgetID;    
                                         inParam1            : intptr_t;    
                                         inParam2            : intptr_t;    
                                         inEatClick          : integer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPUDefocusKeyboard
@@ -187,17 +166,13 @@ CONST
     This causes a click in the widget to send keyboard focus back to X-Plane. 
     This stops editing of any text fields, etc.                                 
    }
-   FUNCTION XPUDefocusKeyboard(
+   function XPUDefocusKeyboard(
                                         inMessage           : XPWidgetMessage;    
                                         inWidget            : XPWidgetID;    
                                         inParam1            : intptr_t;    
                                         inParam2            : intptr_t;    
                                         inEatClick          : integer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPUDragWidget
@@ -206,7 +181,7 @@ CONST
     only the event, but the global coordinates of the drag region, which might 
     be a sub-region of your widget (for example, a title bar).                  
    }
-   FUNCTION XPUDragWidget(
+   function XPUDragWidget(
                                         inMessage           : XPWidgetMessage;    
                                         inWidget            : XPWidgetID;    
                                         inParam1            : intptr_t;    
@@ -215,11 +190,8 @@ CONST
                                         inTop               : integer;    
                                         inRight             : integer;    
                                         inBottom            : integer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
-IMPLEMENTATION
-END.
+implementation
+
+end.

@@ -6,25 +6,25 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPLMPlanes;
-INTERFACE
+unit XPLMPlanes;
+
+interface
 {
    The XPLMPlanes APIs allow you to control the various aircraft in x-plane, 
    both the user's and the sim's.                                              
 }
 
-USES   XPLMDefs;
-   {$A4}
-{$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
-{$ENDIF}
+uses
+  XPLMDefs;
+
+{$A4}
+
 {___________________________________________________________________________
  * USER AIRCRAFT ACCESS
  ___________________________________________________________________________}
 {
                                                                                
 }
-
 
    {
     XPLMSetUsersAircraft
@@ -33,26 +33,20 @@ USES   XPLMDefs;
     the user to be on the nearest airport's first runway.  Pass in a full path 
     (hard drive and everything including the .acf extension) to the .acf file.  
    }
-   PROCEDURE XPLMSetUsersAircraft(
+   procedure XPLMSetUsersAircraft(
                                         inAircraftPath      : Pchar);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
+
    {
     XPLMPlaceUserAtAirport
     
     This routine places the user at a given airport.  Specify the airport by 
     its ICAO code (e.g. 'KBOS').                                                
    }
-   PROCEDURE XPLMPlaceUserAtAirport(
+   procedure XPLMPlaceUserAtAirport(
                                         inAirportCode       : Pchar);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
+
 {___________________________________________________________________________
  * GLOBAL AIRCRAFT ACCESS
  ___________________________________________________________________________}
@@ -60,8 +54,7 @@ USES   XPLMDefs;
                                                                                
 }
 
-
-CONST
+const
     { The user's aircraft is always index 0.                                      }
    XPLM_USER_AIRCRAFT   = 0;
    {
@@ -80,8 +73,8 @@ CONST
     and affects aelerons, rudder, etc.  It is not  necessarily related to the 
     actual position of the plane!                                               
    }
-TYPE
-   XPLMPlaneDrawState_t = RECORD
+type
+   XPLMPlaneDrawState_t = record
      { The size of the draw state struct.                                          }
      structSize               : integer;
      { A ratio from [0..1] describing how far the landing gear is extended.        }
@@ -104,8 +97,10 @@ TYPE
      yokeHeading              : single;
      { Total Roll input for this plane.                                            }
      yokeRoll                 : single;
-   END;
+   end;
+
    PXPLMPlaneDrawState_t = ^XPLMPlaneDrawState_t;
+
    {
     XPLMCountAircraft
     
@@ -115,15 +110,12 @@ TYPE
     controlling aircraft.  In X-Plane 7, this routine reflects the number of 
     aircraft the user has enabled in the rendering options window.              
    }
-   PROCEDURE XPLMCountAircraft(
+   procedure XPLMCountAircraft(
                                         outTotalAircraft    : Pinteger;    
                                         outActiveAircraft   : Pinteger;    
                                         outController       : PXPLMPluginID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
+
    {
     XPLMGetNthAircraftModel
     
@@ -132,15 +124,12 @@ TYPE
     at least 256 chars in length; the path should be at least 512 chars in 
     length.                                                                     
    }
-   PROCEDURE XPLMGetNthAircraftModel(
+   procedure XPLMGetNthAircraftModel(
                                         inIndex             : integer;    
                                         outFileName         : Pchar;    
                                         outPath             : Pchar);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
+
 {___________________________________________________________________________
  * EXCLUSIVE AIRCRAFT ACCESS
  ___________________________________________________________________________}
@@ -158,9 +147,9 @@ TYPE
     access to the multiplayer planes.  Use this to wait for access to 
     multiplayer.                                                                
    }
-TYPE
-     XPLMPlanesAvailable_f = PROCEDURE(
-                                    inRefcon            : pointer); cdecl;   
+type
+    XPLMPlanesAvailable_f = procedure(
+                                        inRefcon            : pointer); cdecl;
 
    {
     XPLMAcquirePlanes
@@ -175,15 +164,11 @@ TYPE
     called when the airplanes are available. If you do receive airplane access, 
     your callback will not be called.                                           
    }
-   FUNCTION XPLMAcquirePlanes(
+   function XPLMAcquirePlanes(
                                         inAircraft          : PPchar;    { Can be nil }
                                         inCallback          : XPLMPlanesAvailable_f;    
                                         inRefcon            : pointer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMReleasePlanes
@@ -191,12 +176,8 @@ TYPE
     Call this function to release access to the planes.  Note that if you are 
     disabled, access to planes is released for you and you must reacquire it.   
    }
-   PROCEDURE XPLMReleasePlanes;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   procedure XPLMReleasePlanes;
+                                        cdecl; external CLibName;
 
    {
     XPLMSetActiveAircraftCount
@@ -205,13 +186,9 @@ TYPE
     higher than the total number of planes availables, only the total number of 
     planes available is actually used.                                          
    }
-   PROCEDURE XPLMSetActiveAircraftCount(
+   procedure XPLMSetActiveAircraftCount(
                                         inCount             : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetAircraftModel
@@ -221,14 +198,10 @@ TYPE
     the .acf extension.  The index is zero based, but you  may not pass in 0 
     (use XPLMSetUsersAircraft to load the user's aircracft).                    
    }
-   PROCEDURE XPLMSetAircraftModel(
+   procedure XPLMSetAircraftModel(
                                         inIndex             : integer;    
                                         inAircraftPath      : Pchar);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMDisableAIForPlane
@@ -236,13 +209,9 @@ TYPE
     This routine turns off X-Plane's AI for a given plane.  The plane will 
     continue to draw and be a real plane in X-Plane, but will not  move itself. 
    }
-   PROCEDURE XPLMDisableAIForPlane(
+   procedure XPLMDisableAIForPlane(
                                         inPlaneIndex        : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMDrawAircraft
@@ -253,7 +222,7 @@ TYPE
     whole plane must be drawn; a 0 indicates you only need the nav lights 
     drawn. (This saves rendering time when planes are far away.)                
    }
-   PROCEDURE XPLMDrawAircraft(
+   procedure XPLMDrawAircraft(
                                         inPlaneIndex        : integer;    
                                         inX                 : single;    
                                         inY                 : single;    
@@ -263,11 +232,7 @@ TYPE
                                         inYaw               : single;    
                                         inFullDraw          : integer;    
                                         inDrawStateInfo     : PXPLMPlaneDrawState_t);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMReinitUsersPlane
@@ -283,12 +248,9 @@ TYPE
     provided to do special experimentation with flight models without resetting 
     flight.                                                                     
    }
-   PROCEDURE XPLMReinitUsersPlane;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   procedure XPLMReinitUsersPlane;
+                                        cdecl; external CLibName;
 
-IMPLEMENTATION
-END.
+implementation
+
+end.

@@ -6,8 +6,9 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPLMProcessing;
-INTERFACE
+unit XPLMProcessing;
+
+interface
 {
    This API allows you to get regular callbacks during the flight loop, the 
    part of X-Plane where the plane's position calculates the physics of 
@@ -19,19 +20,17 @@ INTERFACE
    for graphics.                                                               
 }
 
-USES   XPLMDefs;
-   {$A4}
-{$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
-{$ENDIF}
+uses
+    XPLMDefs;
+
+{$A4}
+
 {___________________________________________________________________________
  * FLIGHT LOOP CALLBACKS
  ___________________________________________________________________________}
 {
                                                                                
 }
-
-
 
 {$IFDEF XPLM210}
    {
@@ -40,7 +39,7 @@ USES   XPLMDefs;
     You can register a flight loop callback to run either before or after the 
     flight model is integrated by X-Plane.                                      
    }
-TYPE
+type
    XPLMFlightLoopPhaseType = (
      { Your callback runs before X-Plane integrates the flight model.              }
       xplm_FlightLoop_Phase_BeforeFlightModel  = 0
@@ -49,6 +48,7 @@ TYPE
      ,xplm_FlightLoop_Phase_AfterFlightModel   = 1
  
    );
+
    PXPLMFlightLoopPhaseType = ^XPLMFlightLoopPhaseType;
 {$ENDIF}
 
@@ -86,7 +86,7 @@ TYPE
     
     The reference constant you passed to your loop is passed back to you.       
    }
-     XPLMFlightLoop_f = FUNCTION(
+     XPLMFlightLoop_f = function(
                                     inElapsedSinceLastCall: single;    
                                     inElapsedTimeSinceLastFlightLoop: single;    
                                     inCounter           : integer;    
@@ -100,12 +100,13 @@ TYPE
     callback.  The strsucture can be expanded in future SDKs - always set 
     structSize to the size of your structure in bytes.                          
    }
-   XPLMCreateFlightLoop_t = RECORD
+   XPLMCreateFlightLoop_t = record
      structSize               : integer;
      phase                    : XPLMFlightLoopPhaseType;
      callbackFunc             : XPLMFlightLoop_f;
      refcon                   : pointer;
-   END;
+   end;
+
    PXPLMCreateFlightLoop_t = ^XPLMCreateFlightLoop_t;
 {$ENDIF}
 
@@ -115,12 +116,8 @@ TYPE
     This routine returns the elapsed time since the sim started up in decimal 
     seconds.                                                                    
    }
-   FUNCTION XPLMGetElapsedTime: single;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMGetElapsedTime: single;
+                                        cdecl; external CLibName;
 
    {
     XPLMGetCycleNumber
@@ -128,12 +125,8 @@ TYPE
     This routine returns a counter starting at zero for each sim cycle 
     computed/video frame rendered.                                              
    }
-   FUNCTION XPLMGetCycleNumber: integer;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMGetCycleNumber: integer;
+                                        cdecl; external CLibName;
 
    {
     XPLMRegisterFlightLoopCallback
@@ -145,15 +138,11 @@ TYPE
     will be called (e.g. pass -1 to be called at the next cylcle).  Pass 0 to 
     not be called; your callback will be inactive.                              
    }
-   PROCEDURE XPLMRegisterFlightLoopCallback(
+   procedure XPLMRegisterFlightLoopCallback(
                                         inFlightLoop        : XPLMFlightLoop_f;    
                                         inInterval          : single;    
                                         inRefcon            : pointer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMUnregisterFlightLoopCallback
@@ -162,14 +151,10 @@ TYPE
     your  flight loop callback.  Once your flight loop callback is 
     unregistered, it will not be called again.                                  
    }
-   PROCEDURE XPLMUnregisterFlightLoopCallback(
+   procedure XPLMUnregisterFlightLoopCallback(
                                         inFlightLoop        : XPLMFlightLoop_f;    
                                         inRefcon            : pointer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetFlightLoopCallbackInterval
@@ -184,16 +169,12 @@ TYPE
     otherwise they are from the time the callback was last called (or the time 
     it was registered if it has never been called.                              
    }
-   PROCEDURE XPLMSetFlightLoopCallbackInterval(
+   procedure XPLMSetFlightLoopCallbackInterval(
                                         inFlightLoop        : XPLMFlightLoop_f;    
                                         inInterval          : single;    
                                         inRelativeToNow     : integer;    
                                         inRefcon            : pointer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {$IFDEF XPLM210}
    {
@@ -203,13 +184,9 @@ TYPE
     loop callback is created using the input param struct, and is inited to be 
     unscheduled.                                                                
    }
-   FUNCTION XPLMCreateFlightLoop(
+   function XPLMCreateFlightLoop(
                                         inParams            : PXPLMCreateFlightLoop_t) : XPLMFlightLoopID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 {$ENDIF}
 
 {$IFDEF XPLM210}
@@ -218,13 +195,9 @@ TYPE
     
     This routine destroys a flight loop callback by ID.                         
    }
-   PROCEDURE XPLMDestroyFlightLoop(
+   procedure XPLMDestroyFlightLoop(
                                         inFlightLoopID      : XPLMFlightLoopID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 {$ENDIF}
 
 {$IFDEF XPLM210}
@@ -261,16 +234,13 @@ TYPE
     4. The object must be unscheduled if this routine is to be called from a 
     thread other than the main thread.                                          
    }
-   PROCEDURE XPLMScheduleFlightLoop(
+   procedure XPLMScheduleFlightLoop(
                                         inFlightLoopID      : XPLMFlightLoopID;    
                                         inInterval          : single;    
                                         inRelativeToNow     : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 {$ENDIF}
 
-IMPLEMENTATION
-END.
+implementation
+
+end.

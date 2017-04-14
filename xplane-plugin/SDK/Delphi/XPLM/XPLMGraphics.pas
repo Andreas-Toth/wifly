@@ -6,8 +6,9 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPLMGraphics;
-INTERFACE
+unit XPLMGraphics;
+
+interface
 {
    Graphics routines for X-Plane and OpenGL. 
    
@@ -40,11 +41,11 @@ INTERFACE
    planet.                                                                     
 }
 
-USES   XPLMDefs;
-   {$A4}
-{$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
-{$ENDIF}
+uses
+  XPLMDefs;
+
+{$A4}
+
 {___________________________________________________________________________
  * X-PLANE GRAPHICS
  ___________________________________________________________________________}
@@ -52,15 +53,13 @@ USES   XPLMDefs;
    These routines allow you to use OpenGL with X-Plane.                        
 }
 
-
-
    {
     XPLMTextureID
     
     XPLM Texture IDs name well-known textures in the sim for you to use. This 
     allows you to recycle textures from X-Plane, saving VRAM.                   
    }
-TYPE
+type
    XPLMTextureID = (
      { The bitmap that contains window outlines, button outlines, fonts, etc.      }
       xplm_Tex_GeneralInterface                = 0
@@ -72,6 +71,7 @@ TYPE
      ,xplm_Tex_AircraftLiteMap                 = 2
  
    );
+
    PXPLMTextureID = ^XPLMTextureID;
 
    {
@@ -117,7 +117,7 @@ TYPE
     code) may change X-Plane's state.  Always set state before drawing after 
     unknown code has executed.                                                  
    }
-   PROCEDURE XPLMSetGraphicsState(
+   procedure XPLMSetGraphicsState(
                                         inEnableFog         : integer;    
                                         inNumberTexUnits    : integer;    
                                         inEnableLighting    : integer;    
@@ -125,11 +125,7 @@ TYPE
                                         inEnableAlphaBlending: integer;    
                                         inEnableDepthTesting: integer;    
                                         inEnableDepthWriting: integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMBindTexture2d
@@ -148,14 +144,10 @@ TYPE
     
     Use this routine instead of glBindTexture(GL_TEXTURE_2D, ....);             
    }
-   PROCEDURE XPLMBindTexture2d(
+   procedure XPLMBindTexture2d(
                                         inTextureNum        : integer;    
                                         inTextureUnit       : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGenerateTextureNumbers
@@ -169,14 +161,10 @@ TYPE
     X-Plane will then  overwrite the plug-ins texture.  This routine returns 
     texture IDs that are out of X-Plane's usage range.                          
    }
-   PROCEDURE XPLMGenerateTextureNumbers(
+   procedure XPLMGenerateTextureNumbers(
                                         outTextureIDs       : Pinteger;    
                                         inCount             : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetTexture
@@ -191,13 +179,9 @@ TYPE
     OPEN ISSUE: We really need a way to make sure X-Plane loads this texture if 
     it isn't around, or at least a way to find out whether it is loaded or not. 
    }
-   FUNCTION XPLMGetTexture(
+   function XPLMGetTexture(
                                         inTexture           : XPLMTextureID) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMWorldToLocal
@@ -207,18 +191,14 @@ TYPE
     and altitude is in meters MSL (mean sea level).  The XYZ coordinates are in 
     meters in the local OpenGL coordinate system.                               
    }
-   PROCEDURE XPLMWorldToLocal(
+   procedure XPLMWorldToLocal(
                                         inLatitude          : real;    
                                         inLongitude         : real;    
                                         inAltitude          : real;    
                                         outX                : Preal;    
                                         outY                : Preal;    
                                         outZ                : Preal);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMLocalToWorld
@@ -231,18 +211,14 @@ TYPE
     NOTE: world coordinates are less precise than local coordinates; you should 
     try to avoid round tripping from local to world and back.                   
    }
-   PROCEDURE XPLMLocalToWorld(
+   procedure XPLMLocalToWorld(
                                         inX                 : real;    
                                         inY                 : real;    
                                         inZ                 : real;    
                                         outLatitude         : Preal;    
                                         outLongitude        : Preal;    
                                         outAltitude         : Preal);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMDrawTranslucentDarkBox
@@ -251,16 +227,12 @@ TYPE
     screen but making text easy to read.  This is the same graphics primitive 
     used by X-Plane to show text files and ATC info.                            
    }
-   PROCEDURE XPLMDrawTranslucentDarkBox(
+   procedure XPLMDrawTranslucentDarkBox(
                                         inLeft              : integer;    
                                         inTop               : integer;    
                                         inRight             : integer;    
                                         inBottom            : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * X-PLANE TEXT
@@ -268,8 +240,6 @@ TYPE
 {
                                                                                
 }
-
-
 
    {
     XPLMFontID
@@ -285,7 +255,7 @@ TYPE
     font.  You can use a dataref to enable proportional font drawing on XP7 if 
     you want to.                                                                
    }
-TYPE
+type
    XPLMFontID = (
      { Mono-spaced font for user interface.  Available in all versions of the SDK. }
       xplmFont_Basic                           = 0
@@ -347,6 +317,7 @@ TYPE
 {$ENDIF}
  
    );
+
    PXPLMFontID = ^XPLMFontID;
 
    {
@@ -359,18 +330,14 @@ TYPE
     array of three floating point colors, representing RGB intensities from 0.0 
     to 1.0.                                                                     
    }
-   PROCEDURE XPLMDrawString(
+   procedure XPLMDrawString(
                                         inColorRGB          : Psingle;    
                                         inXOffset           : integer;    
                                         inYOffset           : integer;    
                                         inChar              : Pchar;    
                                         inWordWrapWidth     : Pinteger;    { Can be nil }
                                         inFontID            : XPLMFontID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMDrawNumber
@@ -382,7 +349,7 @@ TYPE
     well as a character set. This routine returns the xOffset plus width of the 
     string drawn.                                                               
    }
-   PROCEDURE XPLMDrawNumber(
+   procedure XPLMDrawNumber(
                                         inColorRGB          : Psingle;    
                                         inXOffset           : integer;    
                                         inYOffset           : integer;    
@@ -391,11 +358,7 @@ TYPE
                                         inDecimals          : integer;    
                                         inShowSign          : integer;    
                                         inFontID            : XPLMFontID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetFontDimensions
@@ -405,16 +368,12 @@ TYPE
     you don't need a given field.  Note that for a proportional font the width 
     will be an arbitrary, hopefully average width.                              
    }
-   PROCEDURE XPLMGetFontDimensions(
+   procedure XPLMGetFontDimensions(
                                         inFontID            : XPLMFontID;    
                                         outCharWidth        : Pinteger;    { Can be nil }
                                         outCharHeight       : Pinteger;    { Can be nil }
                                         outDigitsOnly       : Pinteger);    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {$IFDEF XPLM200}
    {
@@ -426,16 +385,13 @@ TYPE
     value is floating point; it is possible that future font drawing may allow 
     for fractional pixels.                                                      
    }
-   FUNCTION XPLMMeasureString(
+   function XPLMMeasureString(
                                         inFontID            : XPLMFontID;    
                                         inChar              : Pchar;    
                                         inNumChars          : integer) : single;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 {$ENDIF}
 
-IMPLEMENTATION
-END.
+implementation
+
+end.

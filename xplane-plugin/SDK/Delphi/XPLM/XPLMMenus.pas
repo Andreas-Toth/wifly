@@ -6,8 +6,9 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPLMMenus;
-INTERFACE
+unit XPLMMenus;
+
+interface
 {
    XPLMMenus - Theory of Operation 
    
@@ -19,19 +20,17 @@ INTERFACE
    are zero based.                                                             
 }
 
-USES   XPLMDefs;
-   {$A4}
-{$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
-{$ENDIF}
+uses
+  XPLMDefs;
+
+{$A4}
+
 {___________________________________________________________________________
  * XPLM MENUS
  ___________________________________________________________________________}
 {
                                                                                
 }
-
-
 
    {
     XPLMMenuCheck
@@ -40,7 +39,7 @@ USES   XPLMDefs;
     'checking' in x-plane actually appears as a light which may or may not be 
     lit.  So there are  three possible states.                                  
    }
-TYPE
+type
    XPLMMenuCheck = (
      { there is no symbol to the left of the menu item.                            }
       xplm_Menu_NoCheck                        = 0
@@ -52,6 +51,7 @@ TYPE
      ,xplm_Menu_Checked                        = 2
  
    );
+
    PXPLMMenuCheck = ^XPLMMenuCheck;
 
    {
@@ -69,7 +69,7 @@ TYPE
     (specified when the menu was created) and one for the item (specified when 
     the item was created).                                                      
    }
-     XPLMMenuHandler_f = PROCEDURE(
+     XPLMMenuHandler_f = procedure(
                                     inMenuRef           : pointer;    
                                     inItemRef           : pointer); cdecl;   
 
@@ -79,12 +79,8 @@ TYPE
     This function returns the ID of the plug-ins menu, which is created for you 
     at startup.                                                                 
    }
-   FUNCTION XPLMFindPluginsMenu: XPLMMenuID;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMFindPluginsMenu: XPLMMenuID;
+                                        cdecl; external CLibName;
 
    {
     XPLMCreateMenu
@@ -100,17 +96,13 @@ TYPE
     Important: you must pass a valid, non-empty menu title even if the menu is 
     a submenu where the title is not visible.                                   
    }
-   FUNCTION XPLMCreateMenu(
+   function XPLMCreateMenu(
                                         inName              : Pchar;    
                                         inParentMenu        : XPLMMenuID;    
                                         inParentItem        : integer;    
                                         inHandler           : XPLMMenuHandler_f;    
                                         inMenuRef           : pointer) : XPLMMenuID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMDestroyMenu
@@ -118,13 +110,9 @@ TYPE
     This function destroys a menu that you have created.  Use this to remove a 
     submenu if necessary.  (Normally this function will not be necessary.)      
    }
-   PROCEDURE XPLMDestroyMenu(
+   procedure XPLMDestroyMenu(
                                         inMenuID            : XPLMMenuID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMClearAllMenuItems
@@ -132,13 +120,9 @@ TYPE
     This function removes all menu items from a menu, allowing you to rebuild 
     it.  Use this function if you need to change the number of items on a menu. 
    }
-   PROCEDURE XPLMClearAllMenuItems(
+   procedure XPLMClearAllMenuItems(
                                         inMenuID            : XPLMMenuID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMAppendMenuItem
@@ -151,29 +135,21 @@ TYPE
     of why you'd want to do this is for a proper name.)  See XPLMUtilities for 
     determining the current langauge.                                           
    }
-   FUNCTION XPLMAppendMenuItem(
+   function XPLMAppendMenuItem(
                                         inMenu              : XPLMMenuID;    
                                         inItemName          : Pchar;    
                                         inItemRef           : pointer;    
                                         inForceEnglish      : integer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMAppendMenuSeparator
     
     This routine adds a seperator to the end of a menu.                         
    }
-   PROCEDURE XPLMAppendMenuSeparator(
+   procedure XPLMAppendMenuSeparator(
                                         inMenu              : XPLMMenuID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetMenuItemName
@@ -181,31 +157,23 @@ TYPE
     This routine changes the name of an existing menu item.  Pass in the menu 
     ID and the index of the menu item.                                          
    }
-   PROCEDURE XPLMSetMenuItemName(
+   procedure XPLMSetMenuItemName(
                                         inMenu              : XPLMMenuID;    
                                         inIndex             : integer;    
                                         inItemName          : Pchar;    
                                         inForceEnglish      : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMCheckMenuItem
     
     Set whether a menu item is checked.  Pass in the menu ID and item index.    
    }
-   PROCEDURE XPLMCheckMenuItem(
+   procedure XPLMCheckMenuItem(
                                         inMenu              : XPLMMenuID;    
                                         index               : integer;    
                                         inCheck             : XPLMMenuCheck);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMCheckMenuItemState
@@ -213,30 +181,22 @@ TYPE
     This routine returns whether a menu item is checked or not. A menu item's 
     check mark may be on or off, or a menu may not have an icon at all.         
    }
-   PROCEDURE XPLMCheckMenuItemState(
+   procedure XPLMCheckMenuItemState(
                                         inMenu              : XPLMMenuID;    
                                         index               : integer;    
                                         outCheck            : PXPLMMenuCheck);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMEnableMenuItem
     
     Sets whether this menu item is enabled.  Items start out enabled.           
    }
-   PROCEDURE XPLMEnableMenuItem(
+   procedure XPLMEnableMenuItem(
                                         inMenu              : XPLMMenuID;    
                                         index               : integer;    
                                         enabled             : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {$IFDEF XPLM210}
    {
@@ -245,15 +205,12 @@ TYPE
     Removes one item from a menu.  Note that all menu items below are moved up 
     one; your plugin must track the change in index numbers.                    
    }
-   PROCEDURE XPLMRemoveMenuItem(
+   procedure XPLMRemoveMenuItem(
                                         inMenu              : XPLMMenuID;    
                                         inIndex             : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
-{$ENDIF}
+                                        cdecl; external CLibName;
+ {$ENDIF}
 
-IMPLEMENTATION
-END.
+implementation
+
+end.

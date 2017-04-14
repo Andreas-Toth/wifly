@@ -6,24 +6,25 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPUIGraphics;
+unit XPUIGraphics;
 INTERFACE
 {
                                                                                
 }
 
-USES   XPWidgetDefs;
-   {$A4}
-{$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
-{$ENDIF}
+interface
+
+uses
+  XPWidgetDefs;
+
+{$A4}
+
 {___________________________________________________________________________
  * UI GRAPHICS
  ___________________________________________________________________________}
 {
                                                                                
 }
-
 
    {
     XPWindowStyle
@@ -46,7 +47,7 @@ USES   XPWidgetDefs;
     rescaled in x-plane 6 because it has both a repeating pattern and a 
     gradient in one element.  All other elements can be rescaled.               
    }
-TYPE
+type
    XPWindowStyle = (
      { An LCD screen that shows help.                                              }
       xpWindow_Help                            = 0
@@ -64,6 +65,7 @@ TYPE
      ,xpWindow_ListView                        = 5
  
    );
+
    PXPWindowStyle = ^XPWindowStyle;
 
    {
@@ -74,17 +76,13 @@ TYPE
     appropriate using a bitmap scaling technique (scaling or repeating) as 
     appropriate to the style.                                                   
    }
-   PROCEDURE XPDrawWindow(
+   procedure XPDrawWindow(
                                         inX1                : integer;    
                                         inY1                : integer;    
                                         inX2                : integer;    
                                         inY2                : integer;    
                                         inStyle             : XPWindowStyle);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPGetWindowDefaultDimensions
@@ -92,15 +90,11 @@ TYPE
     This routine returns the default dimensions for a window.  Output is either 
     a minimum or fixed value depending on whether the window is scalable.       
    }
-   PROCEDURE XPGetWindowDefaultDimensions(
+   procedure XPGetWindowDefaultDimensions(
                                         inStyle             : XPWindowStyle;    
                                         outWidth            : Pinteger;    { Can be nil }
                                         outHeight           : Pinteger);    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPElementStyle
@@ -115,7 +109,7 @@ TYPE
     
     Scalable Axis			Required Background                                         
    }
-TYPE
+type
    XPElementStyle = (
      { x						metal				                                                            }
       xpElement_TextField                      = 6
@@ -226,6 +220,7 @@ TYPE
      ,xpElement_WindowDragBarSmooth            = 62
  
    );
+
    PXPElementStyle = ^XPElementStyle;
 
    {
@@ -237,18 +232,14 @@ TYPE
     ugly.  Pass inLit to see the lit version of the element; if the element 
     cannot be lit this is ignored.                                              
    }
-   PROCEDURE XPDrawElement(
+   procedure XPDrawElement(
                                         inX1                : integer;    
                                         inY1                : integer;    
                                         inX2                : integer;    
                                         inY2                : integer;    
                                         inStyle             : XPElementStyle;    
                                         inLit               : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPGetElementDefaultDimensions
@@ -257,16 +248,12 @@ TYPE
     element.  outCanBeLit tells whether the element has both a lit and unlit 
     state.  Pass NULL to not receive any of these parameters.                   
    }
-   PROCEDURE XPGetElementDefaultDimensions(
+   procedure XPGetElementDefaultDimensions(
                                         inStyle             : XPElementStyle;    
                                         outWidth            : Pinteger;    { Can be nil }
                                         outHeight           : Pinteger;    { Can be nil }
                                         outCanBeLit         : Pinteger);    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPTrackStyle
@@ -283,7 +270,7 @@ TYPE
     slid. Progress - this is a progress indicator showing how a long task is 
     going.                                                                      
    }
-TYPE
+type
    XPTrackStyle = (
      { not over metal	can be lit		can be rotated		                                 }
       xpTrack_ScrollBar                        = 0
@@ -295,6 +282,7 @@ TYPE
      ,xpTrack_Progress                         = 2
  
    );
+
    PXPTrackStyle = ^XPTrackStyle;
 
    {
@@ -306,7 +294,7 @@ TYPE
     positioned appropriately.  You can also specify whether the track is lit or 
     not.                                                                        
    }
-   PROCEDURE XPDrawTrack(
+   procedure XPDrawTrack(
                                         inX1                : integer;    
                                         inY1                : integer;    
                                         inX2                : integer;    
@@ -316,11 +304,7 @@ TYPE
                                         inValue             : integer;    
                                         inTrackStyle        : XPTrackStyle;    
                                         inLit               : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPGetTrackDefaultDimensions
@@ -329,15 +313,11 @@ TYPE
     scalable in the larger dimension.  It also returns whether a track can be 
     lit.                                                                        
    }
-   PROCEDURE XPGetTrackDefaultDimensions(
+   procedure XPGetTrackDefaultDimensions(
                                         inStyle             : XPTrackStyle;    
                                         outWidth            : Pinteger;    
                                         outCanBeLit         : Pinteger);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPGetTrackMetrics
@@ -355,7 +335,7 @@ TYPE
     the thumb, and the up area and button.  For horizontal scrollers, the left 
     button decreases; for vertical scrollers, the top button decreases.         
    }
-   PROCEDURE XPGetTrackMetrics(
+   procedure XPGetTrackMetrics(
                                         inX1                : integer;    
                                         inY1                : integer;    
                                         inX2                : integer;    
@@ -370,11 +350,8 @@ TYPE
                                         outThumbSize        : Pinteger;    
                                         outUpPageSize       : Pinteger;    
                                         outUpBtnSize        : Pinteger);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPWIDGETS.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
-IMPLEMENTATION
-END.
+implementation
+
+end.

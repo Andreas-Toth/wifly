@@ -6,17 +6,15 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPLMUtilities;
-INTERFACE
-{
-                                                                               
-}
+unit XPLMUtilities;
 
-USES   XPLMDefs;
-   {$A4}
-{$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
-{$ENDIF}
+interface
+
+uses
+  XPLMDefs;
+
+{$A4}
+
 {___________________________________________________________________________
  * X-PLANE USER INTERACTION
  ___________________________________________________________________________}
@@ -27,8 +25,6 @@ USES   XPLMDefs;
    underlying sim data.                                                        
 }
 
-
-
    {
     XPLMCommandKeyID
     
@@ -36,7 +32,7 @@ USES   XPLMDefs;
     can be sent to x-plane directly.  For example, you can reverse thrust using 
     these  enumerations.                                                        
    }
-TYPE
+type
    XPLMCommandKeyID = (
           xplm_key_pause=0,
           xplm_key_revthrust,
@@ -134,6 +130,7 @@ TYPE
           xplm_key_tranID,
           xplm_key_max
    );
+
    PXPLMCommandKeyID = ^XPLMCommandKeyID;
 
    {
@@ -241,6 +238,7 @@ TYPE
           xplm_joy_lanlights,
           xplm_joy_max
    );
+
    PXPLMCommandButtonID = ^XPLMCommandButtonID;
 
    {
@@ -271,6 +269,7 @@ TYPE
      ,xplm_Host_XAuto                          = 7
  
    );
+
    PXPLMHostApplicationID = ^XPLMHostApplicationID;
 
    {
@@ -313,6 +312,7 @@ TYPE
 {$ENDIF}
  
    );
+
    PXPLMLanguageCode = ^XPLMLanguageCode;
 
 {$IFDEF XPLM200}
@@ -331,6 +331,7 @@ TYPE
      ,xplm_DataFile_ReplayMovie                = 2
  
    );
+
    PXPLMDataFileType = ^XPLMDataFileType;
 {$ENDIF}
 
@@ -346,7 +347,7 @@ TYPE
     logic errors in the management code, do not call any other plugin routines 
     from your error callback - it is only meant for logging!                    
    }
-     XPLMError_f = PROCEDURE(
+     XPLMError_f = procedure(
                                     inMessage           : Pchar); cdecl;   
 {$ENDIF}
 
@@ -361,14 +362,10 @@ TYPE
     WARNING: This function will be deprecated; do not use it.  Instead use 
     XPLMCommandKeyStroke.                                                       
    }
-   PROCEDURE XPLMSimulateKeyPress(
+   procedure XPLMSimulateKeyPress(
                                         inKeyType           : integer;    
                                         inKey               : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSpeakString
@@ -377,13 +374,9 @@ TYPE
     display and also speaks the string if text-to-speech is enabled.  The 
     string is spoken asynchronously, this function returns immediately.         
    }
-   PROCEDURE XPLMSpeakString(
+   procedure XPLMSpeakString(
                                         inString            : Pchar);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMCommandKeyStroke
@@ -393,13 +386,9 @@ TYPE
     remapped their keyboard.  Examples of things you might do with this include 
     pausing the simulator.                                                      
    }
-   PROCEDURE XPLMCommandKeyStroke(
+   procedure XPLMCommandKeyStroke(
                                         inKey               : XPLMCommandKeyID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMCommandButtonPress
@@ -410,13 +399,9 @@ TYPE
     release each button you press.  The APIs are separate so that you can 'hold 
     down' a button for a fixed amount of time.                                  
    }
-   PROCEDURE XPLMCommandButtonPress(
+   procedure XPLMCommandButtonPress(
                                         inButton            : XPLMCommandButtonID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMCommandButtonRelease
@@ -424,13 +409,9 @@ TYPE
     This function simulates any of the actions that might be taken by pressing 
     a joystick button.  See XPLMCommandButtonPress                              
    }
-   PROCEDURE XPLMCommandButtonRelease(
+   procedure XPLMCommandButtonRelease(
                                         inButton            : XPLMCommandButtonID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetVirtualKeyDescription
@@ -440,13 +421,9 @@ TYPE
     for showing users what keyboard mappings they have set up.  The string may 
     read 'unknown' or be a blank or NULL string if the virtual key is unknown.  
    }
-   FUNCTION XPLMGetVirtualKeyDescription(
+   function XPLMGetVirtualKeyDescription(
                                         inVirtualKey        : char) : Pchar;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * X-PLANE MISC
@@ -454,8 +431,6 @@ TYPE
 {
                                                                                
 }
-
-
 
    {
     XPLMReloadScenery
@@ -466,12 +441,8 @@ TYPE
     lat/ref and lon/ref data refs and then call this function to shift the 
     scenery environment.                                                        
    }
-   PROCEDURE XPLMReloadScenery;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   procedure XPLMReloadScenery;
+                                        cdecl; external CLibName;
 
    {
     XPLMGetSystemPath
@@ -480,13 +451,9 @@ TYPE
     is a directory path, so it ends in a trailing : or /.  The buffer you pass 
     should be at least 512 characters long.                                     
    }
-   PROCEDURE XPLMGetSystemPath(
+   procedure XPLMGetSystemPath(
                                         outSystemPath       : Pchar);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetPrefsPath
@@ -495,13 +462,9 @@ TYPE
     preferences in. It ends in a : or /.  The buffer you pass should be at 
     least 512 characters long.                                                  
    }
-   PROCEDURE XPLMGetPrefsPath(
+   procedure XPLMGetPrefsPath(
                                         outPrefsPath        : Pchar);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetDirectorySeparator
@@ -511,12 +474,8 @@ TYPE
     code that concatinates directory paths without having to #ifdef for 
     platform.                                                                   
    }
-   FUNCTION XPLMGetDirectorySeparator: Pchar;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMGetDirectorySeparator: Pchar;
+                                        cdecl; external CLibName;
 
    {
     XPLMExtractFileAndPath
@@ -527,13 +486,9 @@ TYPE
     the file part of the buffer is returned; the original buffer still starts 
     with the path.                                                              
    }
-   FUNCTION XPLMExtractFileAndPath(
+   function XPLMExtractFileAndPath(
                                         inFullPath          : Pchar) : Pchar;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetDirectoryContents
@@ -577,7 +532,7 @@ TYPE
     directories.  If X-Plane 6 compatibility is needed, use your own code to 
     iterate directories.                                                        
    }
-   FUNCTION XPLMGetDirectoryContents(
+   function XPLMGetDirectoryContents(
                                         inDirectoryPath     : Pchar;    
                                         inFirstReturn       : integer;    
                                         outFileNames        : Pchar;    
@@ -586,11 +541,7 @@ TYPE
                                         inIndexCount        : integer;    
                                         outTotalFiles       : Pinteger;    { Can be nil }
                                         outReturnedFiles    : Pinteger) : integer;    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMInitialized
@@ -604,12 +555,8 @@ TYPE
     WARNING: This function is generally not needed and may be deprecated in the 
     future.                                                                     
    }
-   FUNCTION XPLMInitialized: integer;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMInitialized: integer;
+                                        cdecl; external CLibName;
 
    {
     XPLMGetVersions
@@ -622,27 +569,19 @@ TYPE
     The most common use of this routine is to special-case around x-plane 
     version-specific behavior.                                                  
    }
-   PROCEDURE XPLMGetVersions(
+   procedure XPLMGetVersions(
                                         outXPlaneVersion    : Pinteger;    
                                         outXPLMVersion      : Pinteger;    
                                         outHostID           : PXPLMHostApplicationID);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetLanguage
     
     This routine returns the langauge the sim is running in.                    
    }
-   FUNCTION XPLMGetLanguage: XPLMLanguageCode;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   function XPLMGetLanguage: XPLMLanguageCode;
+                                        cdecl; external CLibName;
 
    {
     XPLMDebugString
@@ -651,13 +590,9 @@ TYPE
     immediately flushed so you will not lose  data.  (This does cause a 
     performance penalty.)                                                       
    }
-   PROCEDURE XPLMDebugString(
+   procedure XPLMDebugString(
                                         inString            : Pchar);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {$IFDEF XPLM200}
    {
@@ -678,13 +613,9 @@ TYPE
     not normally run, and this may adversely affect performance, so do not 
     leave error callbacks installed in shipping plugins.                        
    }
-   PROCEDURE XPLMSetErrorCallback(
+   procedure XPLMSetErrorCallback(
                                         inCallback          : XPLMError_f);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 {$ENDIF}
 
 {$IFDEF XPLM200}
@@ -695,13 +626,9 @@ TYPE
     parameter. If the symbol is found a pointer the function is returned, 
     othewise the function will return NULL.                                     
    }
-   FUNCTION XPLMFindSymbol(
+   function XPLMFindSymbol(
                                         inString            : Pchar) : pointer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 {$ENDIF}
 
 {$IFDEF XPLM200}
@@ -712,14 +639,10 @@ TYPE
     folder. To clear the replay, pass a NULL file name (this is only valid with 
     replay movies, not sit files).                                              
    }
-   FUNCTION XPLMLoadDataFile(
+   function XPLMLoadDataFile(
                                         inFileType          : XPLMDataFileType;    
                                         inFilePath          : Pchar) : integer;    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 {$ENDIF}
 
 {$IFDEF XPLM200}
@@ -729,14 +652,10 @@ TYPE
     Saves the current situation or replay; paths are relative to the X-System 
     folder.                                                                     
    }
-   FUNCTION XPLMSaveDataFile(
+   function XPLMSaveDataFile(
                                         inFileType          : XPLMDataFileType;    
                                         inFilePath          : Pchar) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 {$ENDIF}
 
 {$IFDEF XPLM200}
@@ -754,15 +673,12 @@ TYPE
    event that the user presses a button only momentarily.			                   
 }
 
-
-
-
    {
     XPLMCommandPhase
     
     The phases of a command.                                                    
    }
-TYPE
+type
    XPLMCommandPhase = (
      { The command is being started.                                               }
       xplm_CommandBegin                        = 0
@@ -774,6 +690,7 @@ TYPE
      ,xplm_CommandEnd                          = 2
  
    );
+
    PXPLMCommandPhase = ^XPLMCommandPhase;
 
    {
@@ -803,7 +720,7 @@ TYPE
     continue to other plugins and X-Plane, or 0 to halt  processing, 
     potentially bypassing X-Plane code.                                         
    }
-     XPLMCommandCallback_f = FUNCTION(
+     XPLMCommandCallback_f = function(
                                     inCommand           : XPLMCommandRef;    
                                     inPhase             : XPLMCommandPhase;    
                                     inRefcon            : pointer) : integer; cdecl;   
@@ -814,13 +731,9 @@ TYPE
     XPLMFindCommand looks up a command by name, and returns its command 
     reference or NULL if the command does not exist.                            
    }
-   FUNCTION XPLMFindCommand(
+   function XPLMFindCommand(
                                         inName              : Pchar) : XPLMCommandRef;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMCommandBegin
@@ -829,13 +742,9 @@ TYPE
     command reference.  The  command is "held down" until XPLMCommandEnd is 
     called.                                                                     
    }
-   PROCEDURE XPLMCommandBegin(
+   procedure XPLMCommandBegin(
                                         inCommand           : XPLMCommandRef);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMCommandEnd
@@ -843,13 +752,9 @@ TYPE
     XPLMCommandEnd ends the execution of a given command that was started with 
     XPLMCommandBegin.                                                           
    }
-   PROCEDURE XPLMCommandEnd(
+   procedure XPLMCommandEnd(
                                         inCommand           : XPLMCommandRef);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMCommandOnce
@@ -857,13 +762,9 @@ TYPE
     This executes a given command momentarily, that is, the command begins and 
     ends immediately.                                                           
    }
-   PROCEDURE XPLMCommandOnce(
+   procedure XPLMCommandOnce(
                                         inCommand           : XPLMCommandRef);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMCreateCommand
@@ -873,14 +774,10 @@ TYPE
     description may appear in user interface contexts, such as the joystick 
     configuration screen.                                                       
    }
-   FUNCTION XPLMCreateCommand(
+   function XPLMCreateCommand(
                                         inName              : Pchar;    
                                         inDescription       : Pchar) : XPLMCommandRef;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMRegisterCommandHandler
@@ -894,16 +791,12 @@ TYPE
     callback will run after X-Plane.  (You can register a single callback both 
     before and after a command.)                                                
    }
-   PROCEDURE XPLMRegisterCommandHandler(
+   procedure XPLMRegisterCommandHandler(
                                         inComand            : XPLMCommandRef;    
                                         inHandler           : XPLMCommandCallback_f;    
                                         inBefore            : integer;    
                                         inRefcon            : pointer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMUnregisterCommandHandler
@@ -911,17 +804,14 @@ TYPE
     XPLMUnregisterCommandHandler removes a command callback registered with 
     XPLMRegisterCommandHandler.                                                 
    }
-   PROCEDURE XPLMUnregisterCommandHandler(
+   procedure XPLMUnregisterCommandHandler(
                                         inComand            : XPLMCommandRef;    
                                         inHandler           : XPLMCommandCallback_f;    
                                         inBefore            : integer;    
                                         inRefcon            : pointer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
+                                        cdecl; external CLibName;
 {$ENDIF}
 
-{$ENDIF}
-IMPLEMENTATION
-END.
+implementation
+
+end.

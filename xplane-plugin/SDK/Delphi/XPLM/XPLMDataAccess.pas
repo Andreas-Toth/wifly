@@ -6,8 +6,9 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPLMDataAccess;
-INTERFACE
+unit XPLMDataAccess;
+
+interface
 {
    XPLM Data Access API - Theory of Operation 
    
@@ -57,11 +58,11 @@ INTERFACE
    page, choose Documentation).		                                              
 }
 
-USES   XPLMDefs;
-   {$A4}
-{$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
-{$ENDIF}
+uses
+  XPLMDefs;
+
+{$A4}
+
 {___________________________________________________________________________
  * READING AND WRITING DATA
  ___________________________________________________________________________}
@@ -70,9 +71,7 @@ USES   XPLMDefs;
    x-plane and modify some of it.                                              
 }
 
-
-
-TYPE
+type
    {
     XPLMDataRef
     
@@ -117,6 +116,7 @@ TYPE
      ,xplmType_Data                            = 32
  
    );
+
    PXPLMDataTypeID = ^XPLMDataTypeID;
 
    {
@@ -132,13 +132,9 @@ TYPE
     function returns for future use.  Do not look up your data ref by string  
     every time you need to read or write it.                                    
    }
-   FUNCTION XPLMFindDataRef(
+   function XPLMFindDataRef(
                                         inDataRefName       : Pchar) : XPLMDataRef;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMCanWriteDataRef
@@ -146,13 +142,9 @@ TYPE
     Given a data ref, this routine returns true if you can successfully set  
     the data, false otherwise.  Some datarefs are read-only.                    
    }
-   FUNCTION XPLMCanWriteDataRef(
+   function XPLMCanWriteDataRef(
                                         inDataRef           : XPLMDataRef) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMIsDataRefGood
@@ -168,13 +160,9 @@ TYPE
     accessor function on a bad data ref will return a default value, typically 
     0 or 0-length data.                                                         
    }
-   FUNCTION XPLMIsDataRefGood(
+   function XPLMIsDataRefGood(
                                         inDataRef           : XPLMDataRef) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetDataRefTypes
@@ -182,13 +170,9 @@ TYPE
     This routine returns the types of the data ref for accessor use.  If a data 
     ref is available in multiple data types, they will all be returned.         
    }
-   FUNCTION XPLMGetDataRefTypes(
+   function XPLMGetDataRefTypes(
                                         inDataRef           : XPLMDataRef) : XPLMDataTypeID;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * DATA ACCESSORS
@@ -219,13 +203,9 @@ TYPE
     dataref value or 0 if the dataref is invalid/NULL or the plugin is 
     disabled.                                                                   
    }
-   FUNCTION XPLMGetDatai(
+   function XPLMGetDatai(
                                         inDataRef           : XPLMDataRef) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetDatai
@@ -234,14 +214,10 @@ TYPE
     plugin publishing the dataref is disabled, the dataref is invalid, or the 
     dataref is not writable.                                                    
    }
-   PROCEDURE XPLMSetDatai(
+   procedure XPLMSetDatai(
                                         inDataRef           : XPLMDataRef;    
                                         inValue             : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetDataf
@@ -250,13 +226,9 @@ TYPE
     return value is the dataref value or 0.0 if the dataref is invalid/NULL or 
     the plugin is disabled.                                                     
    }
-   FUNCTION XPLMGetDataf(
+   function XPLMGetDataf(
                                         inDataRef           : XPLMDataRef) : single;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetDataf
@@ -265,14 +237,10 @@ TYPE
     routine is a no-op if the plugin publishing the dataref is disabled, the 
     dataref is invalid, or the dataref is not writable.                         
    }
-   PROCEDURE XPLMSetDataf(
+   procedure XPLMSetDataf(
                                         inDataRef           : XPLMDataRef;    
                                         inValue             : single);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetDatad
@@ -281,13 +249,9 @@ TYPE
     return value is the dataref value or 0.0 if the dataref is invalid/NULL or 
     the plugin is disabled.                                                     
    }
-   FUNCTION XPLMGetDatad(
+   function XPLMGetDatad(
                                         inDataRef           : XPLMDataRef) : real;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetDatad
@@ -296,14 +260,10 @@ TYPE
     routine is a no-op if the plugin publishing the dataref is disabled, the 
     dataref is invalid, or the dataref is not writable.                         
    }
-   PROCEDURE XPLMSetDatad(
+   procedure XPLMSetDatad(
                                         inDataRef           : XPLMDataRef;    
                                         inValue             : real);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetDatavi
@@ -322,16 +282,12 @@ TYPE
     above description is how these datarefs are intended to work, but a rogue 
     plugin may have different behavior.                                         
    }
-   FUNCTION XPLMGetDatavi(
+   function XPLMGetDatavi(
                                         inDataRef           : XPLMDataRef;    
                                         outValues           : Pinteger;    { Can be nil }
                                         inOffset            : integer;    
                                         inMax               : integer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetDatavi
@@ -346,16 +302,12 @@ TYPE
     above description is how these datarefs are intended to work, but a rogue 
     plugin may have different behavior.				                                     
    }
-   PROCEDURE XPLMSetDatavi(
+   procedure XPLMSetDatavi(
                                         inDataRef           : XPLMDataRef;    
                                         inValues            : Pinteger;    
                                         inoffset            : integer;    
                                         inCount             : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetDatavf
@@ -374,16 +326,12 @@ TYPE
     above description is how these datarefs are intended to work, but a rogue 
     plugin may have different behavior.                                         
    }
-   FUNCTION XPLMGetDatavf(
+   function XPLMGetDatavf(
                                         inDataRef           : XPLMDataRef;    
                                         outValues           : Psingle;    { Can be nil }
                                         inOffset            : integer;    
                                         inMax               : integer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetDatavf
@@ -398,16 +346,12 @@ TYPE
     above description is how these datarefs are intended to work, but a rogue 
     plugin may have different behavior.				                                     
    }
-   PROCEDURE XPLMSetDatavf(
+   procedure XPLMSetDatavf(
                                         inDataRef           : XPLMDataRef;    
                                         inValues            : Psingle;    
                                         inoffset            : integer;    
                                         inCount             : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMGetDatab
@@ -425,16 +369,12 @@ TYPE
     above description is how these datarefs are intended to work, but a rogue 
     plugin may have different behavior.                                         
    }
-   FUNCTION XPLMGetDatab(
+   function XPLMGetDatab(
                                         inDataRef           : XPLMDataRef;    
                                         outValue            : pointer;    { Can be nil }
                                         inOffset            : integer;    
                                         inMaxBytes          : integer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMSetDatab
@@ -449,16 +389,12 @@ TYPE
     above description is how these datarefs are intended to work, but a rogue 
     plugin may have different behavior.				                                     
    }
-   PROCEDURE XPLMSetDatab(
+   procedure XPLMSetDatab(
                                         inDataRef           : XPLMDataRef;    
                                         inValue             : pointer;    
                                         inOffset            : integer;    
                                         inLength            : integer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * PUBLISHING YOUR PLUGINS DATA
@@ -499,15 +435,15 @@ TYPE
     read-write accessors; you are responsible for avoiding overruns, supporting 
     offset read/writes, and handling a read with a NULL buffer.			              
    }
-TYPE
-     XPLMGetDatai_f = FUNCTION(
+type
+     XPLMGetDatai_f = function(
                                     inRefcon            : pointer) : integer; cdecl;   
 
    {
     XPLMSetDatai_f
     
    }
-     XPLMSetDatai_f = PROCEDURE(
+     XPLMSetDatai_f = procedure(
                                     inRefcon            : pointer;    
                                     inValue             : integer); cdecl;   
 
@@ -515,14 +451,14 @@ TYPE
     XPLMGetDataf_f
     
    }
-     XPLMGetDataf_f = FUNCTION(
+     XPLMGetDataf_f = function(
                                     inRefcon            : pointer) : single; cdecl;   
 
    {
     XPLMSetDataf_f
     
    }
-     XPLMSetDataf_f = PROCEDURE(
+     XPLMSetDataf_f = procedure(
                                     inRefcon            : pointer;    
                                     inValue             : single); cdecl;   
 
@@ -530,14 +466,14 @@ TYPE
     XPLMGetDatad_f
     
    }
-     XPLMGetDatad_f = FUNCTION(
+     XPLMGetDatad_f = function(
                                     inRefcon            : pointer) : real; cdecl;   
 
    {
     XPLMSetDatad_f
     
    }
-     XPLMSetDatad_f = PROCEDURE(
+     XPLMSetDatad_f = procedure(
                                     inRefcon            : pointer;    
                                     inValue             : real); cdecl;   
 
@@ -545,48 +481,48 @@ TYPE
     XPLMGetDatavi_f
     
    }
-     XPLMGetDatavi_f = FUNCTION(
-                                    inRefcon            : pointer;    
+     XPLMGetDatavi_f = function(
+                                    inRefcon            : pointer;
                                     outValues           : Pinteger;    { Can be nil }
-                                    inOffset            : integer;    
-                                    inMax               : integer) : integer; cdecl;   
+                                    inOffset            : integer;
+                                    inMax               : integer) : integer; cdecl;
 
    {
     XPLMSetDatavi_f
-    
+
    }
-     XPLMSetDatavi_f = PROCEDURE(
-                                    inRefcon            : pointer;    
-                                    inValues            : Pinteger;    
-                                    inOffset            : integer;    
-                                    inCount             : integer); cdecl;   
+     XPLMSetDatavi_f = procedure(
+                                    inRefcon            : pointer;
+                                    inValues            : Pinteger;
+                                    inOffset            : integer;
+                                    inCount             : integer); cdecl;
 
    {
     XPLMGetDatavf_f
-    
+
    }
-     XPLMGetDatavf_f = FUNCTION(
-                                    inRefcon            : pointer;    
+     XPLMGetDatavf_f = function(
+                                    inRefcon            : pointer;
                                     outValues           : Psingle;    { Can be nil }
-                                    inOffset            : integer;    
-                                    inMax               : integer) : integer; cdecl;   
+                                    inOffset            : integer;
+                                    inMax               : integer) : integer; cdecl;
 
    {
     XPLMSetDatavf_f
-    
+
    }
-     XPLMSetDatavf_f = PROCEDURE(
-                                    inRefcon            : pointer;    
-                                    inValues            : Psingle;    
-                                    inOffset            : integer;    
-                                    inCount             : integer); cdecl;   
+     XPLMSetDatavf_f = procedure(
+                                    inRefcon            : pointer;
+                                    inValues            : Psingle;
+                                    inOffset            : integer;
+                                    inCount             : integer); cdecl;
 
    {
     XPLMGetDatab_f
-    
+
    }
-     XPLMGetDatab_f = FUNCTION(
-                                    inRefcon            : pointer;    
+     XPLMGetDatab_f = function(
+                                    inRefcon            : pointer;
                                     outValue            : pointer;    { Can be nil }
                                     inOffset            : integer;    
                                     inMaxLength         : integer) : integer; cdecl;   
@@ -595,7 +531,7 @@ TYPE
     XPLMSetDatab_f
     
    }
-     XPLMSetDatab_f = PROCEDURE(
+     XPLMSetDatab_f = procedure(
                                     inRefcon            : pointer;    
                                     inValue             : pointer;    
                                     inOffset            : integer;    
@@ -614,7 +550,7 @@ TYPE
     You are returned a data ref for the new item of data created.  You can use 
     this  data ref to unregister your data later or read or write from it.      
    }
-   FUNCTION XPLMRegisterDataAccessor(
+   function XPLMRegisterDataAccessor(
                                         inDataName          : Pchar;    
                                         inDataType          : XPLMDataTypeID;    
                                         inIsWritable        : integer;    
@@ -632,11 +568,7 @@ TYPE
                                         inWriteData         : XPLMSetDatab_f;    
                                         inReadRefcon        : pointer;    
                                         inWriteRefcon       : pointer) : XPLMDataRef;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMUnregisterDataAccessor
@@ -651,13 +583,9 @@ TYPE
     other plugins to find your data reference once and use it for their entire 
     time of operation.                                                          
    }
-   PROCEDURE XPLMUnregisterDataAccessor(
+   procedure XPLMUnregisterDataAccessor(
                                         inDataRef           : XPLMDataRef);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
 {___________________________________________________________________________
  * SHARING DATA BETWEEN MULTIPLE PLUGINS
@@ -707,8 +635,8 @@ TYPE
     identify which data is being changed. In response, you may want to call one 
     of the XPLMGetDataxxx routines to find the new value of the data.           
    }
-TYPE
-     XPLMDataChanged_f = PROCEDURE(
+type
+     XPLMDataChanged_f = procedure(
                                     inRefcon            : pointer); cdecl;   
 
    {
@@ -730,16 +658,12 @@ TYPE
     A one is returned for successfully creating or finding the shared data; a 
     zero if  the data already exists but is of the wrong type.                  
    }
-   FUNCTION XPLMShareData(
+   function XPLMShareData(
                                         inDataName          : Pchar;    
                                         inDataType          : XPLMDataTypeID;    
                                         inNotificationFunc  : XPLMDataChanged_f;    
                                         inNotificationRefcon: pointer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMUnshareData
@@ -749,16 +673,13 @@ TYPE
     must match XPLMShareData. The actual memory will not necessarily be freed, 
     since other plug-ins could be using it.                                     
    }
-   FUNCTION XPLMUnshareData(
+   function XPLMUnshareData(
                                         inDataName          : Pchar;    
                                         inDataType          : XPLMDataTypeID;    
                                         inNotificationFunc  : XPLMDataChanged_f;    
                                         inNotificationRefcon: pointer) : integer;    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
-IMPLEMENTATION
-END.
+implementation
+
+end.

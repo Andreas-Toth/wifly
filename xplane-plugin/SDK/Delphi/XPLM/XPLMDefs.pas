@@ -6,8 +6,9 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPLMDefs;
-INTERFACE
+unit XPLMDefs;
+
+interface
 {
    This file is contains the cross-platform and basic definitions for the 
    X-Plane SDK. 
@@ -19,14 +20,28 @@ INTERFACE
    using the -D command line option or a preprocessor header.                  
 }
 
-   {$A4}
+{$A4}
+
 {$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
+  {$DEFINE DELPHI}
 {$ENDIF}
 {$IFDEF LINUX}
-   {$DEFINE KYLIX}
+  {$DEFINE KYLIX}
 {$ENDIF}
-TYPE
+
+const
+ CLibName =
+ {$IFDEF DELPHI}
+   {$IFDEF WIN64}
+            'XPWIDGETS_64.DLL';
+   {$ELSE}
+            'XPWIDGETS.DLL';
+   {$ENDIF}
+ {$ELSE}
+            '';
+ {$ENDIF}
+
+type
 {$IFNDEF DELPHI}
 {$IFNDEF KYLIX}
    Pchar = ^char;
@@ -50,9 +65,6 @@ TYPE
    XPLM.lib to use these functions.)                                           
 }
 
-
-
-
 {___________________________________________________________________________
  * GLOBAL DEFINITIONS
  ___________________________________________________________________________}
@@ -60,9 +72,7 @@ TYPE
    These definitions are used in all parts of the SDK.                         
 }
 
-
-
-TYPE
+type
    {
     XPLMPluginID
     
@@ -80,7 +90,7 @@ TYPE
    XPLMPluginID = integer;
    PXPLMPluginID = ^XPLMPluginID;
 
-CONST
+const
     { No plugin.                                                                  }
    XPLM_NO_PLUGIN_ID    = (-1);
 
@@ -106,7 +116,7 @@ CONST
     yet a way for plugins to access the Macintosh control keys without using 
     #ifdefed code.                                                              
    }
-TYPE
+type
    XPLMKeyFlags = (
      { The shift key is down                                                       }
       xplm_ShiftFlag                           = 1
@@ -124,6 +134,7 @@ TYPE
      ,xplm_UpFlag                              = 16
  
    );
+
    PXPLMKeyFlags = ^XPLMKeyFlags;
 
 {___________________________________________________________________________
@@ -141,9 +152,7 @@ TYPE
    keys.                                                                       
 }
 
-
-
-CONST
+const
    XPLM_KEY_RETURN      = 13;
 
    XPLM_KEY_ESCAPE      = 27;
@@ -213,9 +222,7 @@ CONST
    with MS v-keys.                                                             
 }
 
-
-
-CONST
+const
    XPLM_VK_BACK         = $08;
 
    XPLM_VK_TAB          = $09;
@@ -442,5 +449,6 @@ CONST
 
    XPLM_VK_NUMPAD_EQ    = $BD;
 
-IMPLEMENTATION
-END.
+implementation
+
+end.

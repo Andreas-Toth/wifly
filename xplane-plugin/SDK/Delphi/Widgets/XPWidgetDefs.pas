@@ -6,17 +6,34 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPWidgetDefs;
-INTERFACE
-{
-                                                                               
-}
+unit XPWidgetDefs;
 
-USES   XPLMDefs;
-   {$A4}
+interface
+
+uses
+  XPLMDefs;
+
+{$A4}
+
 {$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
+  {$DEFINE DELPHI}
 {$ENDIF}
+{$IFDEF LINUX}
+  {$DEFINE KYLIX}
+{$ENDIF}
+
+const
+ CLibName =
+ {$IFDEF DELPHI}
+   {$IFDEF WIN64}
+            'XPLM_64.DLL';
+   {$ELSE}
+            'XPLM.DLL';
+   {$ENDIF}
+ {$ELSE}
+            '';
+ {$ENDIF}
+
 {___________________________________________________________________________
  * WIDGET DEFINITIONS
  ___________________________________________________________________________}

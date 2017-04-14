@@ -6,8 +6,9 @@
    X-Plane SDK Version: 2.1.1                                                  
 }
 
-UNIT XPLMCamera;
-INTERFACE
+unit XPLMCamera;
+
+interface
 {
    XPLMCamera - THEORY OF OPERATION The XPLMCamera APIs allow plug-ins to 
    control the camera angle in X-Plane.  This has a number of applications, 
@@ -38,11 +39,11 @@ INTERFACE
    aircraft, etc. for complex camera positioning.                              
 }
 
-USES   XPLMDefs;
-   {$A4}
-{$IFDEF MSWINDOWS}
-   {$DEFINE DELPHI}
-{$ENDIF}
+uses
+  XPLMDefs;
+
+{$A4}
+
 {___________________________________________________________________________
  * CAMERA CONTROL
  ___________________________________________________________________________}
@@ -50,14 +51,13 @@ USES   XPLMDefs;
                                                                                
 }
 
-
    {
     XPLMCameraControlDuration
     
     This enumeration states how long you want to retain control of the camera. 
     You can retain it indefinitely or until the user selects a new view.        
    }
-TYPE
+type
    XPLMCameraControlDuration = (
      { Control the camera until the user picks a new view.                         }
       xplm_ControlCameraUntilViewChanges       = 1
@@ -67,6 +67,7 @@ TYPE
      ,xplm_ControlCameraForever                = 2
  
    );
+
    PXPLMCameraControlDuration = ^XPLMCameraControlDuration;
 
    {
@@ -79,7 +80,7 @@ TYPE
     all in degrees. Zoom is a zoom factor, with 1.0 meaning normal zoom and 2.0 
     magnifying by 2x (objects appear larger).                                   
    }
-   XPLMCameraPosition_t = RECORD
+   XPLMCameraPosition_t = record
      x                        : single;
      y                        : single;
      z                        : single;
@@ -87,7 +88,8 @@ TYPE
      heading                  : single;
      roll                     : single;
      zoom                     : single;
-   END;
+   end;
+
    PXPLMCameraPosition_t = ^XPLMCameraPosition_t;
 
    {
@@ -103,7 +105,7 @@ TYPE
     If X-Plane is taking camera control away from you, this function will be 
     called with inIsLosingControl set to 1 and ioCameraPosition NULL.           
    }
-     XPLMCameraControl_f = FUNCTION(
+     XPLMCameraControl_f = function(
                                     outCameraPosition   : PXPLMCameraPosition_t;    { Can be nil }
                                     inIsLosingControl   : integer;    
                                     inRefcon            : pointer) : integer; cdecl;   
@@ -115,15 +117,11 @@ TYPE
     pass a non-null control function.  Specify in inHowLong how long you'd like 
     control  (indefinitely or until a key is pressed).                          
    }
-   PROCEDURE XPLMControlCamera(
+   procedure XPLMControlCamera(
                                         inHowLong           : XPLMCameraControlDuration;    
                                         inControlFunc       : XPLMCameraControl_f;    
                                         inRefcon            : pointer);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMDontControlCamera
@@ -135,12 +133,8 @@ TYPE
     For maximum compatibility you should not use this routine unless you are in 
     posession of the camera.                                                    
    }
-   PROCEDURE XPLMDontControlCamera;
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+   procedure XPLMDontControlCamera;
+                                        cdecl; external CLibName;
 
    {
     XPLMIsCameraBeingControlled
@@ -149,26 +143,19 @@ TYPE
     not.  If it is and you pass in a pointer to a camera control duration, the 
     current control duration will be returned.                                  
    }
-   FUNCTION XPLMIsCameraBeingControlled(
+   function XPLMIsCameraBeingControlled(
                                         outCameraControlDuration: PXPLMCameraControlDuration) : integer;    { Can be nil }
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
    {
     XPLMReadCameraPosition
     
     This function reads the current camera position.                            
    }
-   PROCEDURE XPLMReadCameraPosition(
+   procedure XPLMReadCameraPosition(
                                         outCameraPosition   : PXPLMCameraPosition_t);    
-{$IFDEF DELPHI}
-                                       cdecl; external 'XPLM.DLL';
-{$ELSE}
-                                       cdecl; external '';
-{$ENDIF}
+                                        cdecl; external CLibName;
 
-IMPLEMENTATION
-END.
+implementation
+
+end.
